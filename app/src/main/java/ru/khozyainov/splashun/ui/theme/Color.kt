@@ -2,7 +2,7 @@ package ru.khozyainov.splashun.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val theme_top_app_bar = Color(0xFF84ED0A)
+val theme_light_background = Color(0xFFECEFF1)
+val theme_light_button_disabled = Color(0xFFDADADA)
+val theme_dark_background = Color(0xFF27292D)
