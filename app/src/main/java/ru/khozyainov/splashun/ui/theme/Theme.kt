@@ -18,8 +18,19 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 private val DarkColorPalette = darkColors(
 
     background = theme_dark_background,
-    primary = theme_top_app_bar,
+    //onBackground = ,
+
+    primary = White,
+    onPrimary = Black,
+    //primaryVariant = Black,
+
+    //surface = Black,
     onSurface = White,
+
+//    secondary = Black,
+//    onSecondary = Black,
+
+
     //primaryVariant = Red,//TODO
     //onPrimary = Black,
     //secondary = Red,//TODO
@@ -28,8 +39,9 @@ private val DarkColorPalette = darkColors(
 private val LightColorPalette = lightColors(
 
     background = theme_light_background,
-    primary = theme_top_app_bar,
-    onSurface = Black,
+    primary = Black,
+    onPrimary = White,
+    //onSurface = theme_top_app_bar,
     //primaryVariant = Red,//TODO
     //onPrimary = Black,
     //secondary = Red,//TODO

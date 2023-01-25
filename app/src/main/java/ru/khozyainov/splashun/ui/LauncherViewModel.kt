@@ -3,13 +3,14 @@ package ru.khozyainov.splashun.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import ru.khozyainov.splashun.data.auth.AuthRepository
 import ru.khozyainov.splashun.data.onboarding.OnBoardingRepository
+import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingDestination
+import ru.khozyainov.splashun.ui.screens.home.HomeDestination
+import ru.khozyainov.splashun.ui.screens.login.LoginDestination
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class LauncherViewModel @Inject constructor(
     onboardingRepository: OnBoardingRepository,
@@ -24,22 +25,18 @@ class LauncherViewModel @Inject constructor(
     private val loginCompleted = authRepository.getTokenFlow()
         .map { it != null }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
-    val loginAndOnboardingCompleted = combine(
+    val startDestination = combine(
         onBoardingCompleted,
         loginCompleted
-    ){ onboarding, login ->
-        onboarding to login
-    }.mapLatest { (onboardingCompleted, loginCompleted) ->
+    ){ onBoarding, login ->
+        onBoarding to login
+    }.map { (onBoardingCompleted, loginCompleted) ->
         when{
-            (onboardingCompleted && loginCompleted) -> LaunchNavigatonAction.NavigateToMainActivityAction
-            (onboardingCompleted && !loginCompleted) -> LaunchNavigatonAction.NavigateToLoginActivityAction
-            else -> LaunchNavigatonAction.NavigateToOnboardingAction
+            (onBoardingCompleted && loginCompleted) -> HomeDestination.route
+            (onBoardingCompleted && !loginCompleted) -> LoginDestination.route
+            else -> OnBoardingDestination.route
         }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, OnBoardingDestination.route)
 
-    sealed class LaunchNavigatonAction {
-        object NavigateToOnboardingAction : LaunchNavigatonAction()
-        object NavigateToLoginActivityAction : LaunchNavigatonAction()
-        object NavigateToMainActivityAction : LaunchNavigatonAction()
-    }
+
 }

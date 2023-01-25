@@ -4,31 +4,34 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ru.khozyainov.splashun.ui.LauncherViewModel
 import ru.khozyainov.splashun.ui.navigation.SetupNavGraph
-import ru.khozyainov.splashun.ui.screens.OnBoardingViewModel
+import androidx.compose.runtime.getValue
 import ru.khozyainov.splashun.ui.theme.SplashUnTheme
+import ru.khozyainov.splashun.utils.isExpand
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel: OnBoardingViewModel by viewModels()
-
         setContent {
             SplashUnTheme {
+
+                val viewModel: LauncherViewModel by viewModels()
+                val screen by viewModel.startDestination.collectAsState()
+                val isExpand = calculateWindowSizeClass(this).widthSizeClass.isExpand()
+
                 SetupNavGraph(
                     navController = rememberNavController(),
-                    startDestination =
+                    startDestination = screen,
+                    expand = isExpand
                 )
 
             }

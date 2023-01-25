@@ -20,6 +20,11 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        // place correct redirectScheme~
+        manifestPlaceholders = [
+                appAuthRedirectScheme: "ru.khozyainov.splashun"
+        ]
     }
 
     buildTypes {
@@ -68,20 +73,29 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation "androidx.compose.material:material:$compose_ui_version"
 
-    //utils for Jetpack Compose
-    implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.0"
+    //Accompanist
+    //System UI bar colors
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    //Pager
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    //Indicators
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
 
-    // DataStore Preferences
+    //DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //Dagger hilt
     implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$dagger_hilt_version"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     //Navigation
     implementation "androidx.navigation:navigation-compose:2.5.3"
 
     //AppAuth
     implementation "net.openid:appauth:0.11.1"
+
+    //Window size
+    implementation "androidx.compose.material3:material3-window-size-class:1.0.1"
 
 }

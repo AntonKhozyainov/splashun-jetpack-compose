@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SplashUn</string>
+
+    <string name="onboarding_page_1">Create a photo, publish it, gather an audience, get feedback!</string>
+    <string name="onboarding_page_2">Share with friends, build collections!</string>
+    <string name="onboarding_page_3">Upload your favorite photos and keep track of statistics!</string>
+    <string name="green_ellipse">Green ellipse</string>
+    <string name="onboarding_image_description">Onboarding image</string>
+    <string name="done">Done</string>
 </resources>
