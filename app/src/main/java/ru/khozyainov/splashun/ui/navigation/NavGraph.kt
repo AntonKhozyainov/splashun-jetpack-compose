@@ -1,6 +1,8 @@
 package ru.khozyainov.splashun.ui.navigation
 
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import android.content.Intent
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -12,22 +14,21 @@ import ru.khozyainov.splashun.ui.screens.home.HomeDestination
 import ru.khozyainov.splashun.ui.screens.home.HomeScreen
 import ru.khozyainov.splashun.ui.screens.login.LoginDestination
 import ru.khozyainov.splashun.ui.screens.login.LoginScreen
-import ru.khozyainov.splashun.utils.AppNavigationType
 
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
     startDestination: String,
     modifier: Modifier = Modifier,
-    expand: Boolean = false,
+    expand: Boolean = false
 ) {
 
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
-    ){
-        composable(route = OnBoardingDestination.route){
+    ) {
+        composable(route = OnBoardingDestination.route) {
             OnBoardingScreen(
                 modifier = modifier,
                 navController = navController,
@@ -35,11 +36,15 @@ fun SetupNavGraph(
             )
         }
 
-        composable(route = LoginDestination.route){
-            LoginScreen(modifier = modifier)
+        composable(route = LoginDestination.route) {
+            LoginScreen(
+                modifier = modifier,
+                navController = navController,
+                expand = expand
+            )
         }
 
-        composable(route = HomeDestination.route){
+        composable(route = HomeDestination.route) {
             HomeScreen(modifier = modifier)
         }
     }

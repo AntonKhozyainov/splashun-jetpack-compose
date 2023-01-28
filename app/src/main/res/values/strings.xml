@@ -7,4 +7,8 @@
     <string name="green_ellipse">Green ellipse</string>
     <string name="onboarding_image_description">Onboarding image</string>
     <string name="done">Done</string>
+    <string name="retry">Retry</string>
+    <string name="bangs">Bangs</string>
+    <string name="sing_in_unsplash">Sign in with Unsplash</string>
+
 </resources>

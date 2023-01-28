@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SplashUn" parent="android:Theme.Material.Light.NoActionBar">
+<!--    <style name="Theme.SplashUn" parent="android:Theme.Material.Light.NoActionBar">-->
+    <style name="Theme.SplashUn" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor">@color/theme_top_app_bar</item>
     </style>
+
+    <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/theme_top_app_bar</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimationDuration">600</item>
+        <item name="postSplashScreenTheme">@style/Theme.SplashUn</item>
+    </style>
+
 </resources>
