@@ -1,4 +1,4 @@
-package ru.khozyainov.splashun.data.onboarding
+package ru.khozyainov.splashun.data.repository.onboarding
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

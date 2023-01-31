@@ -236,9 +236,7 @@ fun FinishButton(
 @Preview(showBackground = true, showSystemUi = true)
 fun OnBoardingScreenPreview() {
     SplashUnTheme(darkTheme = false) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            PagerScreen(onBoardingPage = OnBoardingPage.First)
-        }
+        PagerScreen(onBoardingPage = OnBoardingPage.First)
     }
 }
 
@@ -246,9 +244,7 @@ fun OnBoardingScreenPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 fun OnBoardingScreenPreviewDarkTheme() {
     SplashUnTheme(darkTheme = true) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            PagerScreen(onBoardingPage = OnBoardingPage.First)
-        }
+        PagerScreen(onBoardingPage = OnBoardingPage.First)
     }
 }
 

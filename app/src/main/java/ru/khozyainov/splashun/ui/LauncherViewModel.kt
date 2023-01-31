@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
-import ru.khozyainov.splashun.data.auth.AuthRepository
-import ru.khozyainov.splashun.data.onboarding.OnBoardingRepository
+import ru.khozyainov.splashun.data.repository.auth.AuthRepository
+import ru.khozyainov.splashun.data.repository.onboarding.OnBoardingRepository
+import ru.khozyainov.splashun.ui.screens.SplashunDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingDestination
-import ru.khozyainov.splashun.ui.screens.home.HomeDestination
 import ru.khozyainov.splashun.ui.screens.login.LoginDestination
 import javax.inject.Inject
 
@@ -36,7 +36,7 @@ class LauncherViewModel @Inject constructor(
             if (onBoardingCompleted != null && loginCompleted != null) {
                 when {
                     (onBoardingCompleted && loginCompleted) -> {
-                        _uiState.value = LauncherState.Success(HomeDestination.route)
+                        _uiState.value = LauncherState.Success(SplashunDestination.route)
                     }
                     (onBoardingCompleted && !loginCompleted) -> {
                         _uiState.value = LauncherState.Success(LoginDestination.route)
@@ -49,7 +49,6 @@ class LauncherViewModel @Inject constructor(
             }
         }.stateIn(viewModelScope, SharingStarted.Eagerly, LauncherState.Loading(true))
     }
-
 
     sealed class LauncherState {
         data class Success(val route: String) : LauncherState()

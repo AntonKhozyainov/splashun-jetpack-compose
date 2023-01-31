@@ -1,16 +1,18 @@
 package ru.khozyainov.splashun.ui.navigation
 
-import android.content.Intent
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.result.ActivityResult
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.khozyainov.splashun.ui.screens.SplashunApp
+import ru.khozyainov.splashun.ui.screens.SplashunDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingScreen
-import ru.khozyainov.splashun.ui.screens.home.HomeDestination
 import ru.khozyainov.splashun.ui.screens.home.HomeScreen
 import ru.khozyainov.splashun.ui.screens.login.LoginDestination
 import ru.khozyainov.splashun.ui.screens.login.LoginScreen
@@ -44,8 +46,48 @@ fun SetupNavGraph(
             )
         }
 
-        composable(route = HomeDestination.route) {
-            HomeScreen(modifier = modifier)
+        composable(route = SplashunDestination.route) {
+            SplashunApp(
+                modifier = modifier,
+                //navController = navController,
+                expand = expand
+            )
+        }
+    }
+
+}
+
+@Composable
+fun MainNavGraph(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues = PaddingValues(),
+    expand: Boolean = false
+){
+
+    NavHost(
+        navController = navController,
+        startDestination = NavItem.Home.screenRoute,
+        modifier = modifier.padding(innerPadding)
+    ) {
+        composable(
+            route = NavItem.Home.screenRoute
+        ) {
+            HomeScreen(
+                //navController
+            )
+        }
+
+        composable(
+            route = NavItem.Collections.screenRoute
+        ) {
+            //FriendsList(navController)
+        }
+
+        composable(
+            route = NavItem.Profile.screenRoute
+        ) {
+            //FriendsList(navController)
         }
     }
 

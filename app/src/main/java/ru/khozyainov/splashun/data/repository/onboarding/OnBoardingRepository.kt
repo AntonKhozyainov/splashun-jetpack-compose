@@ -1,4 +1,4 @@
-package ru.khozyainov.splashun.data.onboarding
+package ru.khozyainov.splashun.data.repository.onboarding
 
 import kotlinx.coroutines.flow.Flow
 

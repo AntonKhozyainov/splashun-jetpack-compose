@@ -1,4 +1,4 @@
-package ru.khozyainov.splashun.data.auth
+package ru.khozyainov.splashun.data.repository.auth
 
 import android.content.Intent
 import androidx.browser.customtabs.CustomTabsIntent

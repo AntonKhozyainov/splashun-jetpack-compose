@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.khozyainov.splashun.R
-import ru.khozyainov.splashun.ui.screens.login.LoginScreen
 import ru.khozyainov.splashun.ui.theme.SplashUnTheme
 
 @Composable

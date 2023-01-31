@@ -1,9 +1,7 @@
 package ru.khozyainov.splashun.ui.screens.login
 
 import android.content.Intent
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,19 +17,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationResponse
 import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
-import ru.khozyainov.splashun.ui.screens.home.HomeDestination
+import ru.khozyainov.splashun.ui.screens.SplashunDestination
+import ru.khozyainov.splashun.ui.theme.SplashUnTheme
 
 object LoginDestination : NavigationDestination {
     override val route: String = "login"
@@ -45,32 +43,6 @@ fun LoginScreen(
     loginViewModel: LoginViewModel = hiltViewModel(),
     expand: Boolean = false
 ) {
-
-//    val isLaunch = remember {
-//        mutableStateOf(false)
-//    }
-//
-//    val launcher =
-//        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-//            val dataIntent = activityResult.data ?: return@rememberLauncherForActivityResult
-//            handleAuthResponseIntent(dataIntent, loginViewModel)
-//        }
-//
-//    val openAuthPageIntent = loginViewModel.openAuthPageFlow.collectAsState(null)
-//
-//    val loginIsDone = loginViewModel.loginIsDone.collectAsState()
-//
-//    if (loginIsDone.value) {
-//        navController.popBackStack()
-//        navController.navigate(HomeDestination.route)
-//    }
-//
-//    if (!isLaunch.value){
-//        openAuthPageIntent.value?.let { intent ->
-//            launcher.launch(intent)
-//            isLaunch.value = true
-//        }
-//    }
 
     val uiState = loginViewModel.uiState.collectAsState()
 
@@ -95,14 +67,14 @@ fun LoginScreen(
 
     if (uiState.value.loginIsDone) {
         navController.popBackStack()
-        navController.navigate(HomeDestination.route)
+        navController.navigate(SplashunDestination.route)
     }
 
     if (uiState.value.errorMessage.isNotBlank()) {
         ExceptionScreen(
             exceptionMessage = uiState.value.errorMessage
         ) {
-            loginViewModel.openLoginPage()
+            loginViewModel.refreshState()
         }
     } else {
         if (uiState.value.loading) {
@@ -192,6 +164,37 @@ fun LoginContentScreen(
     }
 }
 
+@Composable
+@Preview(showBackground = true, showSystemUi = true)
+fun LoginScreenPreview() {
+    SplashUnTheme(darkTheme = false) {
+        LoginContentScreen(
+            onClick = {}
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true, showSystemUi = true)
+fun LoginScreenDarkTheme() {
+    SplashUnTheme(darkTheme = true) {
+        LoginContentScreen(
+            onClick = {}
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true, widthDp = 1000)
+fun LoginScreenPreviewExpanded() {
+    SplashUnTheme {
+        LoginContentScreen(
+            expand = true,
+            onClick = {}
+        )
+    }
+}
+
 //Нужно получить код и обменять его на токен.
 //При этом в ответе может прийти ошибка авторизации, ее тоже нужно обработать.
 private fun handleAuthResponseIntent(
@@ -211,28 +214,3 @@ private fun handleAuthResponseIntent(
             loginViewModel.getTokenByRequest(tokenExchangeRequest)
     }
 }
-
-
-//@Composable
-//@Preview(showBackground = true, showSystemUi = true)
-//fun LoginScreenPreview() {
-//    SplashUnTheme(darkTheme = false) {
-//        LoginScreen()
-//    }
-//}
-//
-//@Composable
-//@Preview(showBackground = true, showSystemUi = true)
-//fun LoginScreenDarkTheme() {
-//    SplashUnTheme(darkTheme = true) {
-//        LoginScreen()
-//    }
-//}
-//
-//@Composable
-//@Preview(showBackground = true, widthDp = 1000)
-//fun LoginScreenPreviewExpanded() {
-//    SplashUnTheme {
-//        LoginScreen()
-//    }
-//}

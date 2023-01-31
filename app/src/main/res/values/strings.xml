@@ -11,4 +11,8 @@
     <string name="bangs">Bangs</string>
     <string name="sing_in_unsplash">Sign in with Unsplash</string>
 
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="collections">Collections</string>
+
 </resources>
