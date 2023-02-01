@@ -62,6 +62,7 @@ fun MainNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(),
+    searchText: String = String(),
     expand: Boolean = false
 ){
 
@@ -74,7 +75,8 @@ fun MainNavGraph(
             route = NavItem.Home.screenRoute
         ) {
             HomeScreen(
-                //navController
+                searchText = searchText,
+                modifier = modifier
             )
         }
 

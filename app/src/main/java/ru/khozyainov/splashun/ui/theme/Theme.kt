@@ -23,6 +23,7 @@ private val DarkColorPalette = darkColors(
     primary = White,
     onPrimary = Black,
     secondary = Black,
+    surface = theme_top_app_bar,
 
     //surface = Black,
     onSurface = White,
@@ -42,7 +43,7 @@ private val LightColorPalette = lightColors(
     onBackground = Black,
     primary = Black,
     onPrimary = White,
-    //onSurface = theme_top_app_bar,
+    surface = theme_top_app_bar,
     //primaryVariant = Red,//TODO
     //onPrimary = Black,
     secondary = theme_light_button_disabled,

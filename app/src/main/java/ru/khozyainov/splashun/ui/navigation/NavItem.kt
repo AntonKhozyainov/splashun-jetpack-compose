@@ -11,13 +11,13 @@ sealed class NavItem(
 ) {
 
     object Home : NavItem(
-        titleRes = R.string.home,
+        titleRes = R.string.ribbon,
         iconRes = R.drawable.ic_bottom_nav_menu_home,
         screenRoute = "home"
     )
 
     object Collections : NavItem(
-        titleRes = R.string.collections,
+        titleRes = R.string.collection,
         iconRes = R.drawable.ic_bottom_nav_menu_collections,
         screenRoute = "collections"
     )

@@ -11,8 +11,18 @@
     <string name="bangs">Bangs</string>
     <string name="sing_in_unsplash">Sign in with Unsplash</string>
 
-    <string name="home">Home</string>
+<!--    <string name="home">Home</string>-->
     <string name="profile">Profile</string>
-    <string name="collections">Collections</string>
+<!--    <string name="collections">Collections</string>-->
+
+    <string name="ribbon">Ribbon</string>
+    <string name="photo">Photo</string>
+    <string name="collection">Collection</string>
+
+    <string name="back_button">Back</string>
+
+    <string name="search_icon">Search icon</string>
+    <string name="search">Search here…</string>
+    <string name="search_close_icon">Close Icon</string>
 
 </resources>
