@@ -76,7 +76,8 @@ fun MainNavGraph(
         ) {
             HomeScreen(
                 searchText = searchText,
-                modifier = modifier
+                modifier = modifier,
+                expand = expand
             )
         }
 

@@ -21,7 +21,9 @@ fun LoadingScreen(
             .background(MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            color = MaterialTheme.colors.onBackground
+        )
     }
 }
 

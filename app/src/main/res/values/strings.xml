@@ -25,4 +25,8 @@
     <string name="search">Search here…</string>
     <string name="search_close_icon">Close Icon</string>
 
+    <string name="author_image">Author image</string>
+
+    <string name="like_icon">Like icon</string>
+
 </resources>

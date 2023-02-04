@@ -20,33 +20,31 @@ private val DarkColorPalette = darkColors(
     background = theme_dark_background,
     onBackground = White,
 
-    primary = White,
+    primary = theme_top_app_bar,
     onPrimary = Black,
-    secondary = Black,
-    surface = theme_top_app_bar,
 
+    surface = White,
+    secondary = White,
+
+    primaryVariant = Black
     //surface = Black,
-    onSurface = White,
+    //onSurface = White,
 
-//    secondary = Black,
+
 //    onSecondary = Black,
-
-
     //primaryVariant = Red,//TODO
-    //onPrimary = Black,
-    //secondary = Red,//TODO
 )
 
 private val LightColorPalette = lightColors(
 
     background = theme_light_background,
     onBackground = Black,
-    primary = Black,
+
+    primary = theme_top_app_bar,
     onPrimary = White,
-    surface = theme_top_app_bar,
-    //primaryVariant = Red,//TODO
-    //onPrimary = Black,
-    secondary = theme_light_button_disabled,
+
+    surface = theme_light_button_disabled,
+    secondary = Black,
 
     /* Other default colors to override
     background = Color.White,

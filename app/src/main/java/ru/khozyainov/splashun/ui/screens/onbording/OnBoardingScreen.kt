@@ -79,7 +79,7 @@ fun OnBoardingScreen(
                 modifier = modifier
                     .align(Alignment.CenterHorizontally)
                     .weight(1f),
-                activeColor = MaterialTheme.colors.primary,
+                activeColor = MaterialTheme.colors.secondary,
                 inactiveColor = theme_light_button_disabled
             )
 
@@ -220,7 +220,7 @@ fun FinishButton(
             Button(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.primary,
+                    backgroundColor = MaterialTheme.colors.secondary,
                     contentColor = MaterialTheme.colors.onPrimary
                 )
             ) {

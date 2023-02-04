@@ -13,16 +13,19 @@ import kotlinx.coroutines.flow.map
 import net.openid.appauth.*
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.suspendCoroutine
 
-class AuthRepositoryImpl @Inject constructor(
+
+class AuthRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val authService: AuthorizationService,
     private val authRequest: AuthorizationRequest.Builder
-) : AuthRepository {
+//) : AuthRepository {
+) {
 
     //Получаем сохраненный токен авторизации
-    override fun getTokenFlow(): Flow<String?> = dataStore.data
+    fun getTokenFlow(): Flow<String?> = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -40,7 +43,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     //ЗАПРОС НА Авторизацию кладем в Intent customTabsIntent
-    override fun getLoginPageIntent(): Intent = authService.getAuthorizationRequestIntent(
+    fun getLoginPageIntent(): Intent = authService.getAuthorizationRequestIntent(
         authRequest
             //Сервер unsplash не поддерживает pkce по этому установим setCodeVerifier(null)
             .setCodeVerifier(null)
@@ -49,7 +52,7 @@ class AuthRepositoryImpl @Inject constructor(
         CustomTabsIntent.Builder().build()
     )
 
-    override suspend fun getTokenByRequest(tokenRequest: TokenRequest): String {
+    suspend fun getTokenByRequest(tokenRequest: TokenRequest): String {
         val token = performTokenRequestSuspend(tokenRequest)
         setToken(token)
         return token

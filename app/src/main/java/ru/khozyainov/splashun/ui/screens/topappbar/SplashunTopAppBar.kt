@@ -43,7 +43,7 @@ fun SplashunTopAppBar(
             )
         },
         modifier = modifier,
-        backgroundColor = MaterialTheme.colors.surface,
+        backgroundColor = MaterialTheme.colors.primary,
         actions = {
             TopAppBarAction(
                 currentScreen = currentScreen,
@@ -55,7 +55,7 @@ fun SplashunTopAppBar(
                 },
                 onCloseClicked = {
                     viewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
-                    onPressSearch("")
+                    onPressSearch(String())
                 },
                 onSearchClicked = onPressSearch,
                 onSearchTriggered = {
@@ -143,7 +143,7 @@ fun SearchAppBar(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp),
-        color = MaterialTheme.colors.surface
+        color = MaterialTheme.colors.primary
     ) {
         TextField(modifier = modifier
             .fillMaxWidth(),

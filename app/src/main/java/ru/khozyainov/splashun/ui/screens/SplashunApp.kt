@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,7 +126,7 @@ fun RailNavigation(
     NavigationRail(
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.background,
-        contentColor = MaterialTheme.colors.primary
+        contentColor = MaterialTheme.colors.surface
     ) {
         items.forEach { item ->
             NavigationRailItem(
@@ -135,8 +136,8 @@ fun RailNavigation(
                         contentDescription = stringResource(id = item.titleRes)
                     )
                 },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = MaterialTheme.colors.secondary,
+                selectedContentColor = MaterialTheme.colors.onBackground,
+                unselectedContentColor = MaterialTheme.colors.onPrimary,
                 selected = currentScreen.screenRoute == item.screenRoute,
                 onClick = {
                     navController.navigate(item.screenRoute) {
@@ -165,7 +166,7 @@ fun BottomNavigation(
     BottomNavigation(
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.background,
-        contentColor = MaterialTheme.colors.primary
+        contentColor = MaterialTheme.colors.surface
     ) {
 
         items.forEach { item ->
@@ -176,8 +177,8 @@ fun BottomNavigation(
                         contentDescription = stringResource(id = item.titleRes)
                     )
                 },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = MaterialTheme.colors.secondary,
+                selectedContentColor = MaterialTheme.colors.onBackground,
+                unselectedContentColor = MaterialTheme.colors.onPrimary,
                 selected = currentScreen.screenRoute == item.screenRoute,
                 onClick = {
                     navController.navigate(item.screenRoute) {
