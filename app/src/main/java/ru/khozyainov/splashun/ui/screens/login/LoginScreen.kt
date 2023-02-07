@@ -6,9 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -156,7 +154,11 @@ fun LoginContentScreen(
             onClick = onClick,
             modifier = modifier
                 .width(250.dp)
-                .padding(horizontal = 20.dp, vertical = if (expand) 8.dp else 50.dp)
+                .padding(horizontal = 20.dp, vertical = if (expand) 8.dp else 50.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.secondary,
+                contentColor = MaterialTheme.colors.onPrimary
+            )
         ) {
             Text(text = stringResource(id = R.string.sing_in_unsplash))
         }

@@ -29,4 +29,9 @@
 
     <string name="like_icon">Like icon</string>
 
+    <string name="photo_list_title">New</string>
+    <string name="photo_list_title_search">Search</string>
+    <string name="photo_list_title_2">Today\'s top</string>
+    <string name="photo_list_title_search_2">At the request of "%1$s"</string>
+
 </resources>

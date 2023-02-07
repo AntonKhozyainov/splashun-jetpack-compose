@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -63,8 +64,14 @@ fun MainNavGraph(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(),
     searchText: String = String(),
-    expand: Boolean = false
-){
+    expand: Boolean = false,
+    scrollToTop: Boolean = false,
+    onScrollToTop: () -> Unit
+) {
+
+    //TODO remember?
+    val displayWidthHeight =
+        LocalContext.current.resources.displayMetrics.widthPixels to LocalContext.current.resources.displayMetrics.heightPixels
 
     NavHost(
         navController = navController,
@@ -77,7 +84,10 @@ fun MainNavGraph(
             HomeScreen(
                 searchText = searchText,
                 modifier = modifier,
-                expand = expand
+                expand = expand,
+                displayWidthHeight = displayWidthHeight,
+                scrollToTop = scrollToTop,
+                onScrollToTop = onScrollToTop
             )
         }
 

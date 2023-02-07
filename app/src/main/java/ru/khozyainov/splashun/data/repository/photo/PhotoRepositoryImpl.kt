@@ -1,8 +1,10 @@
 package ru.khozyainov.splashun.data.repository.photo
 
 import androidx.paging.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,54 +45,54 @@ class PhotoRepositoryImpl @Inject constructor(
 //        }
 
 
-//    suspend fun setRefreshPhoto(abbreviatedPhotoRemote: AbbreviatedPhotoRemote) =
-//        withContext(Dispatchers.IO) {
-//            val itemPhotoEntity = itemPhotoDao.getItemPhotoByID(abbreviatedPhotoRemote.id)
-//                ?: throw Exception("Отсутствует элемент с id = ${abbreviatedPhotoRemote.id}") //TODO
-//
-//            itemPhotoDao.updatePhoto(
-//                itemPhotoEntity.copy(
-//                    likes = abbreviatedPhotoRemote.likes,
-//                    like = abbreviatedPhotoRemote.like
-//                )
-//            )
-//        }
+    override suspend fun setRefreshPhoto(abbreviatedPhotoRemote: AbbreviatedPhotoRemote) =
+        withContext(Dispatchers.IO) {
+            val itemPhotoEntity = photoDao.getPhotoByID(abbreviatedPhotoRemote.id)
+                ?: throw Exception("Отсутствует элемент с id = ${abbreviatedPhotoRemote.id}") //TODO
 
-//    override fun setLike(
-//        photo: Photo,
-//        onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
-//        onErrorCallback: (error: Throwable) -> Unit
-//    ) = photoAPI.likePhoto(photo.id).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
-//        override fun onResponse(
-//            call: Call<AbbreviatedPhotoParentRemote>,
-//            response: Response<AbbreviatedPhotoParentRemote>
-//        ) {
-//            if (response.isSuccessful)
-//                onCompleteCallback(response.body()?.photo ?: throw Exception("TODO")) //TODO
-//        }
-//
-//        override fun onFailure(call: Call<AbbreviatedPhotoParentRemote>, t: Throwable) {
-//            onErrorCallback(t)
-//        }
-//    })
-//
-//    override fun deleteLike(
-//        photo: Photo,
-//        onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
-//        onErrorCallback: (error: Throwable) -> Unit
-//    ) = photoAPI.deleteLikePhoto(photo.id).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
-//        override fun onResponse(
-//            call: Call<AbbreviatedPhotoParentRemote>,
-//            response: Response<AbbreviatedPhotoParentRemote>
-//        ) {
-//            if (response.isSuccessful)
-//                onCompleteCallback(response.body()?.photo ?: throw Exception("TODO")) //TODO
-//        }
-//
-//        override fun onFailure(call: Call<AbbreviatedPhotoParentRemote>, t: Throwable) {
-//            onErrorCallback(t)
-//        }
-//    })
+            photoDao.updatePhoto(
+                itemPhotoEntity.copy(
+                    likes = abbreviatedPhotoRemote.likes,
+                    like = abbreviatedPhotoRemote.like
+                )
+            )
+        }
+
+    override fun setLike(
+        photo: Photo,
+        onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
+        onErrorCallback: (error: Throwable) -> Unit
+    ) = photoAPI.likePhoto(photo.id).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
+        override fun onResponse(
+            call: Call<AbbreviatedPhotoParentRemote>,
+            response: Response<AbbreviatedPhotoParentRemote>
+        ) {
+            if (response.isSuccessful)
+                onCompleteCallback(response.body()?.photo ?: throw Exception("TODO")) //TODO
+        }
+
+        override fun onFailure(call: Call<AbbreviatedPhotoParentRemote>, t: Throwable) {
+            onErrorCallback(t)
+        }
+    })
+
+    override fun deleteLike(
+        photo: Photo,
+        onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
+        onErrorCallback: (error: Throwable) -> Unit
+    ) = photoAPI.deleteLikePhoto(photo.id).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
+        override fun onResponse(
+            call: Call<AbbreviatedPhotoParentRemote>,
+            response: Response<AbbreviatedPhotoParentRemote>
+        ) {
+            if (response.isSuccessful)
+                onCompleteCallback(response.body()?.photo ?: throw Exception("TODO")) //TODO
+        }
+
+        override fun onFailure(call: Call<AbbreviatedPhotoParentRemote>, t: Throwable) {
+            onErrorCallback(t)
+        }
+    })
 
     private companion object {
         const val PAGE_SIZE = 10

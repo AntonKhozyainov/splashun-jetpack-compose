@@ -49,6 +49,10 @@ fun SplashunApp(
         mutableStateOf(String())
     }
 
+    val scrollToTop = remember {
+        mutableStateOf(false)
+    }
+
     if (expand) {
         Scaffold(
             topBar = {
@@ -71,14 +75,21 @@ fun SplashunApp(
                     navController = navController,
                     modifier = modifier,
                     items = navItems,
-                    currentScreen = currentScreen
+                    currentScreen = currentScreen,
+                    scrollToTop = {
+                        scrollToTop.value = it
+                    }
                 )
 
                 MainNavGraph(
                     navController = navController,
                     expand = true,
                     modifier = modifier,
-                    searchText = searchText.value
+                    searchText = searchText.value,
+                    scrollToTop = scrollToTop.value,
+                    onScrollToTop = {
+                        scrollToTop.value = false
+                    }
                 )
             }
         }
@@ -100,7 +111,10 @@ fun SplashunApp(
                     navController = navController,
                     modifier = modifier,
                     items = navItems,
-                    currentScreen = currentScreen
+                    currentScreen = currentScreen,
+                    scrollToTop = {
+                        scrollToTop.value = it
+                    }
                 )
             },
             modifier = modifier
@@ -109,7 +123,11 @@ fun SplashunApp(
                 navController = navController,
                 innerPadding = innerPadding,
                 modifier = modifier,
-                searchText = searchText.value
+                searchText = searchText.value,
+                scrollToTop = scrollToTop.value,
+                onScrollToTop = {
+                    scrollToTop.value = false
+                }
             )
         }
     }
@@ -121,7 +139,8 @@ fun RailNavigation(
     navController: NavController,
     modifier: Modifier = Modifier,
     items: List<NavItem>,
-    currentScreen: NavItem
+    currentScreen: NavItem,
+    scrollToTop: (Boolean) -> Unit
 ) {
     NavigationRail(
         modifier = modifier,
@@ -149,6 +168,7 @@ fun RailNavigation(
                         }
                         launchSingleTop = true
                         restoreState = true
+                        scrollToTop(currentScreen.screenRoute == item.screenRoute)
                     }
                 }
             )
@@ -161,7 +181,8 @@ fun BottomNavigation(
     navController: NavController,
     modifier: Modifier = Modifier,
     items: List<NavItem>,
-    currentScreen: NavItem
+    currentScreen: NavItem,
+    scrollToTop: (Boolean) -> Unit
 ) {
     BottomNavigation(
         modifier = modifier,
@@ -190,6 +211,8 @@ fun BottomNavigation(
                         }
                         launchSingleTop = true
                         restoreState = true
+
+                        scrollToTop(currentScreen.screenRoute == item.screenRoute)
                     }
                 }
             )

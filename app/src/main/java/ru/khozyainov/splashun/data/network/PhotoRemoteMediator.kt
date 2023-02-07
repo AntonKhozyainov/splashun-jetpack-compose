@@ -31,12 +31,12 @@ class PhotoRemoteMediator @AssistedInject constructor(
 
         return try {
             //todo
-            val listItemPhoto =
-                if (query.isEmpty()) photoAPI.getPhotos(pageIndex, state.config.pageSize)
-                else photoAPI.searchPhotos(query, pageIndex, state.config.pageSize).listPhotoEntity
-                    .map { it.copy(search = query) }
+//            val listItemPhoto =
+//                if (query.isEmpty()) photoAPI.getPhotos(pageIndex, state.config.pageSize)
+//                else photoAPI.searchPhotos(query, pageIndex, state.config.pageSize).listPhotoEntity
+//                    .map { it.copy(search = query) }
 
-            //val listItemPhoto = getTestList()
+            val listItemPhoto = getTestList()
 
             if (loadType == LoadType.REFRESH) {
                 photoDao.refresh(query, listItemPhoto)
