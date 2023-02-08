@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,6 +16,8 @@ import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.navigation.NavItem
 import ru.khozyainov.splashun.ui.navigation.MainNavGraph
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
+import ru.khozyainov.splashun.ui.screens.home.PhotoDetailDestination
+import ru.khozyainov.splashun.ui.screens.home.RibbonDestination
 import ru.khozyainov.splashun.ui.screens.topappbar.SplashunTopAppBar
 import ru.khozyainov.splashun.ui.theme.SplashUnTheme
 
@@ -39,11 +40,10 @@ fun SplashunApp(
     )
 
     val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry.value?.destination?.route
 
-    val currentScreen = navItems.first { navItem ->
-        navItem.screenRoute == (navBackStackEntry.value?.destination?.route
-            ?: navItems.first().screenRoute)
-    }
+    val currentBottomNavRoute = getCurrentNavRoute(route = currentRoute)
+    val currentDestination = getCurrentDestination(route = currentRoute)
 
     val searchText = remember {
         mutableStateOf(String())
@@ -57,8 +57,8 @@ fun SplashunApp(
         Scaffold(
             topBar = {
                 SplashunTopAppBar(
-                    currentScreen = currentScreen,
-                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigationDestination = currentDestination,
+                    canNavigateBack = canNavigateBack(currentDestination),
                     navigateUp = { navController.navigateUp() },
                     modifier = modifier,
                     onPressSearch = {
@@ -75,7 +75,7 @@ fun SplashunApp(
                     navController = navController,
                     modifier = modifier,
                     items = navItems,
-                    currentScreen = currentScreen,
+                    currentNavRoute = currentBottomNavRoute,
                     scrollToTop = {
                         scrollToTop.value = it
                     }
@@ -97,8 +97,8 @@ fun SplashunApp(
         Scaffold(
             topBar = {
                 SplashunTopAppBar(
-                    currentScreen = currentScreen,
-                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigationDestination = currentDestination,
+                    canNavigateBack = canNavigateBack(currentDestination),
                     navigateUp = { navController.navigateUp() },
                     modifier = modifier,
                     onPressSearch = {
@@ -111,7 +111,7 @@ fun SplashunApp(
                     navController = navController,
                     modifier = modifier,
                     items = navItems,
-                    currentScreen = currentScreen,
+                    currentNavRoute = currentBottomNavRoute,
                     scrollToTop = {
                         scrollToTop.value = it
                     }
@@ -139,7 +139,7 @@ fun RailNavigation(
     navController: NavController,
     modifier: Modifier = Modifier,
     items: List<NavItem>,
-    currentScreen: NavItem,
+    currentNavRoute: String,
     scrollToTop: (Boolean) -> Unit
 ) {
     NavigationRail(
@@ -157,7 +157,7 @@ fun RailNavigation(
                 },
                 selectedContentColor = MaterialTheme.colors.onBackground,
                 unselectedContentColor = MaterialTheme.colors.onPrimary,
-                selected = currentScreen.screenRoute == item.screenRoute,
+                selected = currentNavRoute == item.screenRoute,
                 onClick = {
                     navController.navigate(item.screenRoute) {
 
@@ -168,7 +168,7 @@ fun RailNavigation(
                         }
                         launchSingleTop = true
                         restoreState = true
-                        scrollToTop(currentScreen.screenRoute == item.screenRoute)
+                        scrollToTop(currentNavRoute == item.screenRoute)
                     }
                 }
             )
@@ -181,7 +181,7 @@ fun BottomNavigation(
     navController: NavController,
     modifier: Modifier = Modifier,
     items: List<NavItem>,
-    currentScreen: NavItem,
+    currentNavRoute: String,
     scrollToTop: (Boolean) -> Unit
 ) {
     BottomNavigation(
@@ -200,7 +200,7 @@ fun BottomNavigation(
                 },
                 selectedContentColor = MaterialTheme.colors.onBackground,
                 unselectedContentColor = MaterialTheme.colors.onPrimary,
-                selected = currentScreen.screenRoute == item.screenRoute,
+                selected = currentNavRoute == item.screenRoute,
                 onClick = {
                     navController.navigate(item.screenRoute) {
 
@@ -212,13 +212,40 @@ fun BottomNavigation(
                         launchSingleTop = true
                         restoreState = true
 
-                        scrollToTop(currentScreen.screenRoute == item.screenRoute)
+                        scrollToTop(currentNavRoute == item.screenRoute)
                     }
                 }
             )
         }
     }
 }
+
+private fun getCurrentNavRoute(
+    route: String?
+): String{
+   return when(route){
+        NavItem.Collections.screenRoute -> route
+        NavItem.Profile.screenRoute -> route
+        else -> NavItem.Home.screenRoute
+    }
+}
+
+private fun getCurrentDestination(
+    route: String?
+): NavigationDestination{
+    return when(route){
+        //NavItem.Collections.screenRoute -> route
+        PhotoDetailDestination.route -> PhotoDetailDestination
+        else -> RibbonDestination
+    }
+}
+
+private fun canNavigateBack(currentDestination: NavigationDestination): Boolean =
+    when(currentDestination){
+        is PhotoDetailDestination -> true
+        else -> false
+    }
+
 
 @Preview(showBackground = true)
 @Composable

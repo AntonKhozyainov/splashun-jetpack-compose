@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -16,32 +15,39 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.DefaultShadowColor
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import ru.khozyainov.splashun.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.models.Photo
-import ru.khozyainov.splashun.ui.screens.LoadingScreen
-import androidx.paging.compose.items
-import kotlinx.coroutines.launch
+import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
-import ru.khozyainov.splashun.utils.forwardingPainter
-import ru.khozyainov.splashun.utils.fromPixelsToDp
-import kotlin.random.Random
+import ru.khozyainov.splashun.ui.screens.LoadingScreen
+
+object RibbonDestination : NavigationDestination {
+    override val route: String = "ribbon"
+    override val titleRes: Int = R.string.ribbon
+}
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
+    navController: NavController,
     modifier: Modifier = Modifier,
     searchText: String = String(),
     expand: Boolean = false,
@@ -56,7 +62,7 @@ fun HomeScreen(
 
     //val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
-    val photoList = uiState.value.photoFlow?.collectAsLazyPagingItems() ?: throw Exception("TODO") //TODO
+    val photoList = uiState.value.photoFlow.collectAsLazyPagingItems()
 
     val refreshing = remember { mutableStateOf(false) }
 
@@ -92,8 +98,6 @@ fun HomeScreen(
                     state = listState
 
                 ) {
-
-
                     if (!refreshing.value) {
 
                         item {
@@ -117,6 +121,9 @@ fun HomeScreen(
                                     photo?.let {
                                         homeViewModel.setLike(photo)
                                     }
+                                },
+                                onClickCard = { photoId ->
+                                    navController.navigate("${RibbonDestination.route}/$photoId")
                                 }
                             )
                         }
@@ -190,12 +197,14 @@ fun PhotoListTitle(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PhotoCard(
     photo: Photo?,
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
-    onClickLike: () -> Unit
+    onClickLike: () -> Unit,
+    onClickCard: (String) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -228,6 +237,9 @@ fun PhotoCard(
                 .padding(4.dp)
                 .fillMaxWidth(),
             elevation = 2.dp,
+            onClick = {
+                onClickCard(photo.id)
+            }
         ) {
             Box(
                 modifier = modifier
@@ -276,6 +288,11 @@ fun PhotoCard(
                             modifier = modifier
                                 .size(27.dp)
                                 .clip(CircleShape)
+                                .shadow(
+                                    elevation = 2.dp,
+                                    shape = CircleShape,
+                                    clip = true
+                                )
                         )
 
                         Spacer(modifier = modifier.padding(2.dp))
@@ -287,14 +304,26 @@ fun PhotoCard(
 
                             Text(
                                 text = photo.author.fullName,
-                                style = MaterialTheme.typography.body1,
+                                style = MaterialTheme.typography.body1.copy(
+                                    shadow = Shadow(
+                                        color = DefaultShadowColor,
+                                        offset = Offset(2f, 2f),
+                                        blurRadius = 2f
+                                    )
+                                ),
                                 color = Color.White,
                                 fontWeight = Bold
                             )
 
                             Text(
                                 text = photo.author.name,
-                                style = MaterialTheme.typography.body2,
+                                style = MaterialTheme.typography.body2.copy(
+                                    shadow = Shadow(
+                                        color = DefaultShadowColor,
+                                        offset = Offset(2f, 2f),
+                                        blurRadius = 2f
+                                    )
+                                ),
                                 color = Color.White
                             )
 
@@ -308,10 +337,16 @@ fun PhotoCard(
                             },
                         verticalAlignment = Alignment.CenterVertically,
 
-                    ) {
+                        ) {
                         Text(
-                            text = photo.likes.toString(),
-                            style = MaterialTheme.typography.body1,
+                            text = photo.getLikeCountString(),
+                            style = MaterialTheme.typography.body1.copy(
+                                shadow = Shadow(
+                                    color = DefaultShadowColor,
+                                    offset = Offset(2f, 2f),
+                                    blurRadius = 2f
+                                )
+                            ),
                             color = Color.White
                         )
 
@@ -321,7 +356,12 @@ fun PhotoCard(
                             painter = painterResource(id = if (photo.like) R.drawable.ic_like else R.drawable.ic_like_empty),
                             contentDescription = stringResource(id = R.string.like_icon),
                             modifier = modifier
-                                .size(14.dp)
+                                .size(16.dp)
+                                .shadow(
+                                    elevation = 2.dp,
+                                    shape = CircleShape,
+                                    clip = true
+                                )
                         )
 
                     }

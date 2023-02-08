@@ -1,13 +1,11 @@
 package ru.khozyainov.splashun.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.khozyainov.splashun.ui.screens.SplashunApp
@@ -15,6 +13,8 @@ import ru.khozyainov.splashun.ui.screens.SplashunDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingScreen
 import ru.khozyainov.splashun.ui.screens.home.HomeScreen
+import ru.khozyainov.splashun.ui.screens.home.PhotoDetailDestination
+import ru.khozyainov.splashun.ui.screens.home.PhotoDetailScreen
 import ru.khozyainov.splashun.ui.screens.login.LoginDestination
 import ru.khozyainov.splashun.ui.screens.login.LoginScreen
 
@@ -78,18 +78,16 @@ fun MainNavGraph(
         startDestination = NavItem.Home.screenRoute,
         modifier = modifier.padding(innerPadding)
     ) {
-        composable(
-            route = NavItem.Home.screenRoute
-        ) {
-            HomeScreen(
-                searchText = searchText,
-                modifier = modifier,
-                expand = expand,
-                displayWidthHeight = displayWidthHeight,
-                scrollToTop = scrollToTop,
-                onScrollToTop = onScrollToTop
-            )
-        }
+
+        homeGraph(
+            navController = navController,
+            searchText = searchText,
+            modifier = modifier,
+            expand = expand,
+            displayWidthHeight = displayWidthHeight,
+            scrollToTop = scrollToTop,
+            onScrollToTop = onScrollToTop
+        )
 
         composable(
             route = NavItem.Collections.screenRoute
@@ -104,4 +102,39 @@ fun MainNavGraph(
         }
     }
 
+}
+
+fun NavGraphBuilder.homeGraph(
+    navController: NavController,
+    searchText: String = String(),
+    expand: Boolean = false,
+    scrollToTop: Boolean = false,
+    onScrollToTop: () -> Unit,
+    modifier: Modifier = Modifier,
+    displayWidthHeight: Pair<Int, Int>
+) {
+    composable(
+        route = NavItem.Home.screenRoute
+    ) {
+        HomeScreen(
+            navController = navController,
+            searchText = searchText,
+            modifier = modifier,
+            expand = expand,
+            displayWidthHeight = displayWidthHeight,
+            scrollToTop = scrollToTop,
+            onScrollToTop = onScrollToTop
+        )
+    }
+
+    composable(
+        route = PhotoDetailDestination.route,
+        arguments = listOf(navArgument(PhotoDetailDestination.argName) { type = NavType.StringType })
+    ) { backStackEntry ->
+        val photoId = backStackEntry.arguments?.getString(PhotoDetailDestination.argName)
+        PhotoDetailScreen(
+            photoId = photoId,
+            modifier = modifier,
+        )
+    }
 }

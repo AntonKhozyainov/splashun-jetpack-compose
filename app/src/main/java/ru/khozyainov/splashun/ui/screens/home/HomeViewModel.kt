@@ -99,7 +99,7 @@ class HomeViewModel @Inject constructor(
     }
 
     data class HomeScreenState(
-        val photoFlow: Flow<PagingData<Photo>>? = null,
+        val photoFlow: Flow<PagingData<Photo>> = emptyFlow(),
         //val loading: Boolean = false,
         val errorMessage: String = String()
     )

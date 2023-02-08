@@ -6,8 +6,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -17,13 +19,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import ru.khozyainov.splashun.ui.navigation.NavItem
 import ru.khozyainov.splashun.R
+import ru.khozyainov.splashun.ui.navigation.NavigationDestination
+import ru.khozyainov.splashun.ui.screens.home.RibbonDestination
 import ru.khozyainov.splashun.ui.theme.SplashUnTheme
 
 @Composable
 fun SplashunTopAppBar(
-    currentScreen: NavItem,
+    navigationDestination: NavigationDestination,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -34,10 +37,42 @@ fun SplashunTopAppBar(
     val searchWidgetState = viewModel.searchWidgetState
     val searchTextState = viewModel.searchTextState
 
+    if (canNavigateBack) {
+        TopAppBarWithNavIcon(
+            navigationDestination = navigationDestination,
+            modifier = modifier,
+            navigateUp = navigateUp,
+            searchWidgetState = searchWidgetState,
+            searchTextState = searchTextState,
+            viewModel = viewModel,
+            onPressSearch = onPressSearch
+        )
+    } else {
+        TopAppBarWithoutNavIcon(
+            navigationDestination = navigationDestination,
+            modifier = modifier,
+            searchWidgetState = searchWidgetState,
+            searchTextState = searchTextState,
+            viewModel = viewModel,
+            onPressSearch = onPressSearch
+        )
+    }
+}
+
+@Composable
+fun TopAppBarWithoutNavIcon(
+    navigationDestination: NavigationDestination,
+    modifier: Modifier = Modifier,
+    searchWidgetState: State<SearchWidgetState>,
+    searchTextState: State<String>,
+    viewModel: TopAppBarSearchViewModel,
+    onPressSearch: (String) -> Unit,
+) {
+
     TopAppBar(
         title = {
             Text(
-                stringResource(id = currentScreen.titleRes),
+                stringResource(id = navigationDestination.titleRes),
                 style = MaterialTheme.typography.h1,
                 color = Color.Black
             )
@@ -46,7 +81,7 @@ fun SplashunTopAppBar(
         backgroundColor = MaterialTheme.colors.primary,
         actions = {
             TopAppBarAction(
-                currentScreen = currentScreen,
+                navigationDestination = navigationDestination,
                 modifier = modifier,
                 searchWidgetState = searchWidgetState.value,
                 searchTextState = searchTextState.value,
@@ -63,23 +98,66 @@ fun SplashunTopAppBar(
                 }
             )
         }
-//        navigationIcon = {
-//            if (canNavigateBack) {
-//                IconButton(onClick = navigateUp) {
-//                    Icon(
-//                        imageVector = Icons.Filled.ArrowBack,
-//                        contentDescription = stringResource(R.string.back_button)
-//                    )
-//                }
-//            }
-//        }
     )
+}
 
+@Composable
+fun TopAppBarWithNavIcon(
+    navigationDestination: NavigationDestination,
+    modifier: Modifier = Modifier,
+    searchWidgetState: State<SearchWidgetState>,
+    searchTextState: State<String>,
+    viewModel: TopAppBarSearchViewModel,
+    onPressSearch: (String) -> Unit,
+    navigateUp: () -> Unit,
+) {
+
+    TopAppBar(
+        title = {
+            Text(
+                stringResource(id = navigationDestination.titleRes),
+                style = MaterialTheme.typography.h1,
+                color = Color.Black
+            )
+        },
+        modifier = modifier,
+        backgroundColor = MaterialTheme.colors.primary,
+        actions = {
+            TopAppBarAction(
+                navigationDestination = navigationDestination,
+                modifier = modifier,
+                searchWidgetState = searchWidgetState.value,
+                searchTextState = searchTextState.value,
+                onTextChange = {
+                    viewModel.updateSearchTextState(newValue = it)
+                },
+                onCloseClicked = {
+                    viewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
+                    onPressSearch(String())
+                },
+                onSearchClicked = onPressSearch,
+                onSearchTriggered = {
+                    viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
+                }
+            )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = navigateUp,
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.back_button),
+                    tint = Color.Black
+                )
+            }
+        }
+    )
 }
 
 @Composable
 fun TopAppBarAction(
-    currentScreen: NavItem,
+    navigationDestination: NavigationDestination,
     searchWidgetState: SearchWidgetState,
     modifier: Modifier = Modifier,
     searchTextState: String,
@@ -88,8 +166,8 @@ fun TopAppBarAction(
     onSearchClicked: (String) -> Unit,
     onSearchTriggered: () -> Unit
 ) {
-    when (currentScreen) {
-        is NavItem.Home -> {
+    when (navigationDestination) {
+        is RibbonDestination -> {
             when (searchWidgetState) {
                 SearchWidgetState.CLOSED -> {
                     DefaultHomeAppBar(
@@ -116,7 +194,7 @@ fun TopAppBarAction(
 fun DefaultHomeAppBar(
     onSearchClicked: () -> Unit,
     modifier: Modifier = Modifier,
-){
+) {
     IconButton(
         onClick = {
             onSearchClicked()
@@ -208,7 +286,7 @@ fun SearchAppBar(
 
 @Preview
 @Composable
-fun DefaultHomeAppBarPreview(){
+fun DefaultHomeAppBarPreview() {
     SplashUnTheme() {
         DefaultHomeAppBar(
             onSearchClicked = {}
@@ -218,7 +296,7 @@ fun DefaultHomeAppBarPreview(){
 
 @Preview
 @Composable
-fun SearchAppBarPreview(){
+fun SearchAppBarPreview() {
     SplashUnTheme() {
         SearchAppBar(
             text = "Search",
