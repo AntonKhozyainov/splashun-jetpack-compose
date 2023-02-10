@@ -135,6 +135,7 @@ fun NavGraphBuilder.homeGraph(
         PhotoDetailScreen(
             photoId = photoId,
             modifier = modifier,
+            displayWidthHeight = displayWidthHeight
         )
     }
 }

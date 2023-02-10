@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
+import ru.khozyainov.splashun.ui.screens.home.PhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.home.RibbonDestination
 import ru.khozyainov.splashun.ui.theme.SplashUnTheme
 
@@ -95,6 +97,9 @@ fun TopAppBarWithoutNavIcon(
                 onSearchClicked = onPressSearch,
                 onSearchTriggered = {
                     viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
+                },
+                onSharedPhoto = {
+                    //TODO
                 }
             )
         }
@@ -138,6 +143,9 @@ fun TopAppBarWithNavIcon(
                 onSearchClicked = onPressSearch,
                 onSearchTriggered = {
                     viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
+                },
+                onSharedPhoto = {
+                    //TODO
                 }
             )
         },
@@ -164,7 +172,8 @@ fun TopAppBarAction(
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
-    onSearchTriggered: () -> Unit
+    onSearchTriggered: () -> Unit,
+    onSharedPhoto: () -> Unit
 ) {
     when (navigationDestination) {
         is RibbonDestination -> {
@@ -184,6 +193,20 @@ fun TopAppBarAction(
                         modifier = modifier
                     )
                 }
+            }
+        }
+        is PhotoDetailDestination ->{
+            IconButton(
+                modifier = modifier,
+                onClick = {
+                    onSharedPhoto()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = stringResource(id = R.string.share_icon),
+                    tint = Color.Black
+                )
             }
         }
         else -> {}

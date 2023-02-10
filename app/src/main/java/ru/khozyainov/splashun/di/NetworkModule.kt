@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import ru.khozyainov.splashun.data.network.adapters.PhotoDetailAdapterJSON
 import ru.khozyainov.splashun.data.network.adapters.PhotoListAdapterJSON
 import ru.khozyainov.splashun.data.network.adapters.SearchPhotoAdapterJSON
 import ru.khozyainov.splashun.data.network.api.PhotoApi
@@ -41,7 +42,7 @@ object NetworkModule {
                 Moshi.Builder()
                     .add(PhotoListAdapterJSON())
                     .add(SearchPhotoAdapterJSON(PhotoListAdapterJSON()))
-                    //.add(PhotoDetailAdapterJSON())
+                    .add(PhotoDetailAdapterJSON())
                     .build()
             )
         )

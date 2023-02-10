@@ -3,6 +3,7 @@ package ru.khozyainov.splashun.data.repository.photo
 import androidx.paging.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -14,8 +15,8 @@ import ru.khozyainov.splashun.data.network.api.PhotoApi
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoParentRemote
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoRemote
 import ru.khozyainov.splashun.ui.models.Photo
+import ru.khozyainov.splashun.ui.models.PhotoDetail
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @OptIn(ExperimentalPagingApi::class)
 class PhotoRepositoryImpl @Inject constructor(
@@ -40,12 +41,12 @@ class PhotoRepositoryImpl @Inject constructor(
                 }
             }
 
-//    fun getPhotoById(id: String): Flow<PhotoDetails> = flow {
-//            emit(photoAPI.getPhotoByID(id))
-//        }
+    override fun getPhotoById(id: String): Flow<PhotoDetail> = flow {
+            emit(photoAPI.getPhotoByID(id))
+        }
 
 
-    override suspend fun setRefreshPhoto(abbreviatedPhotoRemote: AbbreviatedPhotoRemote) =
+    override suspend fun setRefreshPhotoToDataBase(abbreviatedPhotoRemote: AbbreviatedPhotoRemote) =
         withContext(Dispatchers.IO) {
             val itemPhotoEntity = photoDao.getPhotoByID(abbreviatedPhotoRemote.id)
                 ?: throw Exception("Отсутствует элемент с id = ${abbreviatedPhotoRemote.id}") //TODO
@@ -59,10 +60,10 @@ class PhotoRepositoryImpl @Inject constructor(
         }
 
     override fun setLike(
-        photo: Photo,
+        photoId: String,
         onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
         onErrorCallback: (error: Throwable) -> Unit
-    ) = photoAPI.likePhoto(photo.id).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
+    ) = photoAPI.likePhoto(photoId).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
         override fun onResponse(
             call: Call<AbbreviatedPhotoParentRemote>,
             response: Response<AbbreviatedPhotoParentRemote>
@@ -77,10 +78,10 @@ class PhotoRepositoryImpl @Inject constructor(
     })
 
     override fun deleteLike(
-        photo: Photo,
+        photoId: String,
         onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
         onErrorCallback: (error: Throwable) -> Unit
-    ) = photoAPI.deleteLikePhoto(photo.id).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
+    ) = photoAPI.deleteLikePhoto(photoId).enqueue(object : Callback<AbbreviatedPhotoParentRemote> {
         override fun onResponse(
             call: Call<AbbreviatedPhotoParentRemote>,
             response: Response<AbbreviatedPhotoParentRemote>

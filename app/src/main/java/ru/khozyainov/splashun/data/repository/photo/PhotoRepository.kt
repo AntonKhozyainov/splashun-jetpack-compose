@@ -4,24 +4,25 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoRemote
 import ru.khozyainov.splashun.ui.models.Photo
+import ru.khozyainov.splashun.ui.models.PhotoDetail
 
 interface PhotoRepository {
 
     fun getPhotos(query: String): Flow<PagingData<Photo>>
 
     fun setLike(
-        photo: Photo,
+        photoId: String,
         onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
         onErrorCallback: (error: Throwable) -> Unit
     )
 
     fun deleteLike(
-        photo: Photo,
+        photoId: String,
         onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,
         onErrorCallback: (error: Throwable) -> Unit
     )
 
-    suspend fun setRefreshPhoto(abbreviatedPhotoRemote: AbbreviatedPhotoRemote)
+    suspend fun setRefreshPhotoToDataBase(abbreviatedPhotoRemote: AbbreviatedPhotoRemote)
 
-    //fun getPhotoById(id: String): Flow<PhotoDetails>
+    fun getPhotoById(id: String): Flow<PhotoDetail>
 }

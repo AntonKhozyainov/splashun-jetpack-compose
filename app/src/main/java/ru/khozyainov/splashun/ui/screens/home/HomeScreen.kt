@@ -1,6 +1,5 @@
 package ru.khozyainov.splashun.ui.screens.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -38,13 +37,14 @@ import ru.khozyainov.splashun.ui.models.Photo
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
+import ru.khozyainov.splashun.utils.getLikeCountString
 
 object RibbonDestination : NavigationDestination {
     override val route: String = "ribbon"
     override val titleRes: Int = R.string.ribbon
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -58,7 +58,7 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
 
     homeViewModel.setSearchBy(searchText)
-    val uiState = homeViewModel.uiState.collectAsState()
+    val uiState = homeViewModel.uiHomeState.collectAsState()
 
     //val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -339,7 +339,7 @@ fun PhotoCard(
 
                         ) {
                         Text(
-                            text = photo.getLikeCountString(),
+                            text = photo.likes.getLikeCountString(),
                             style = MaterialTheme.typography.body1.copy(
                                 shadow = Shadow(
                                     color = DefaultShadowColor,

@@ -9,6 +9,7 @@ import retrofit2.http.*
 import ru.khozyainov.splashun.data.db.entities.PhotoEntity
 import ru.khozyainov.splashun.data.db.entities.SearchPhoto
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoParentRemote
+import ru.khozyainov.splashun.ui.models.PhotoDetail
 
 interface PhotoApi {
 
@@ -18,10 +19,10 @@ interface PhotoApi {
         @Query("per_page") limit: Int
     ): List<PhotoEntity>
 
-//    @GET("/photos/{id}")
-//    suspend fun getPhotoByID(
-//        @Path("id") id: String
-//    ): PhotoDetails
+    @GET("/photos/{id}")
+    suspend fun getPhotoByID(
+        @Path("id") id: String
+    ): PhotoDetail
 
     @GET("/search/photos")
     suspend fun searchPhotos(
