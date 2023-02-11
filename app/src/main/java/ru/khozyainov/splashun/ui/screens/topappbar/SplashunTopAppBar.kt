@@ -1,5 +1,7 @@
 package ru.khozyainov.splashun.ui.screens.topappbar
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,6 +16,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -33,42 +36,50 @@ fun SplashunTopAppBar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     onPressSearch: (String) -> Unit,
-    viewModel: TopAppBarSearchViewModel = hiltViewModel()
+    viewModel: TopAppBarViewModel = hiltViewModel(),
+    photoIdForShare: String? = null
 ) {
 
+    val context = LocalContext.current
     val searchWidgetState = viewModel.searchWidgetState
     val searchTextState = viewModel.searchTextState
 
     if (canNavigateBack) {
         TopAppBarWithNavIcon(
+            context = context,
             navigationDestination = navigationDestination,
             modifier = modifier,
             navigateUp = navigateUp,
             searchWidgetState = searchWidgetState,
             searchTextState = searchTextState,
             viewModel = viewModel,
-            onPressSearch = onPressSearch
+            onPressSearch = onPressSearch,
+            photoIdForShare = photoIdForShare
         )
     } else {
         TopAppBarWithoutNavIcon(
+            context = context,
             navigationDestination = navigationDestination,
             modifier = modifier,
             searchWidgetState = searchWidgetState,
             searchTextState = searchTextState,
             viewModel = viewModel,
-            onPressSearch = onPressSearch
+            onPressSearch = onPressSearch,
+            photoIdForShare = photoIdForShare
         )
     }
 }
 
 @Composable
 fun TopAppBarWithoutNavIcon(
+    context: Context,
     navigationDestination: NavigationDestination,
     modifier: Modifier = Modifier,
     searchWidgetState: State<SearchWidgetState>,
     searchTextState: State<String>,
-    viewModel: TopAppBarSearchViewModel,
+    viewModel: TopAppBarViewModel,
     onPressSearch: (String) -> Unit,
+    photoIdForShare: String? = null
 ) {
 
     TopAppBar(
@@ -99,7 +110,12 @@ fun TopAppBarWithoutNavIcon(
                     viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
                 },
                 onSharedPhoto = {
-                    //TODO
+                    photoIdForShare?.let {
+                        sharePhoto(
+                            context = context,
+                            photoId = it
+                        )
+                    }
                 }
             )
         }
@@ -108,13 +124,15 @@ fun TopAppBarWithoutNavIcon(
 
 @Composable
 fun TopAppBarWithNavIcon(
+    context: Context,
     navigationDestination: NavigationDestination,
     modifier: Modifier = Modifier,
     searchWidgetState: State<SearchWidgetState>,
     searchTextState: State<String>,
-    viewModel: TopAppBarSearchViewModel,
+    viewModel: TopAppBarViewModel,
     onPressSearch: (String) -> Unit,
     navigateUp: () -> Unit,
+    photoIdForShare: String? = null,
 ) {
 
     TopAppBar(
@@ -145,7 +163,12 @@ fun TopAppBarWithNavIcon(
                     viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
                 },
                 onSharedPhoto = {
-                    //TODO
+                    photoIdForShare?.let {
+                        sharePhoto(
+                            context = context,
+                            photoId = it
+                        )
+                    }
                 }
             )
         },
@@ -328,4 +351,22 @@ fun SearchAppBarPreview() {
             onSearchClicked = {}
         )
     }
+}
+
+private fun sharePhoto(
+    context: Context,
+    photoId: String
+) {
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        //putExtra(Intent.EXTRA_SUBJECT, subject)
+        putExtra(Intent.EXTRA_TEXT, "https://unsplash.com/photos/$photoId")
+    }
+
+    context.startActivity(
+        Intent.createChooser(
+            intent,
+            context.getString(R.string.share_photo_link)
+        )
+    )
 }

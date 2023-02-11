@@ -3,6 +3,7 @@ package ru.khozyainov.splashun.ui.screens
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -53,6 +54,10 @@ fun SplashunApp(
         mutableStateOf(false)
     }
 
+    val photoIdForShare: MutableState<String?> = remember {
+        mutableStateOf(null)
+    }
+
     if (expand) {
         Scaffold(
             topBar = {
@@ -63,7 +68,8 @@ fun SplashunApp(
                     modifier = modifier,
                     onPressSearch = {
                         searchText.value = it
-                    }
+                    },
+                    photoIdForShare = photoIdForShare.value
                 )
             },
             modifier = modifier
@@ -89,6 +95,9 @@ fun SplashunApp(
                     scrollToTop = scrollToTop.value,
                     onScrollToTop = {
                         scrollToTop.value = false
+                    },
+                    photoIdForShare = { photoId ->
+                        photoIdForShare.value = photoId
                     }
                 )
             }
@@ -103,7 +112,8 @@ fun SplashunApp(
                     modifier = modifier,
                     onPressSearch = {
                         searchText.value = it
-                    }
+                    },
+                    photoIdForShare = photoIdForShare.value
                 )
             },
             bottomBar = {
@@ -127,6 +137,9 @@ fun SplashunApp(
                 scrollToTop = scrollToTop.value,
                 onScrollToTop = {
                     scrollToTop.value = false
+                },
+                photoIdForShare = { photoId ->
+                    photoIdForShare.value = photoId
                 }
             )
         }

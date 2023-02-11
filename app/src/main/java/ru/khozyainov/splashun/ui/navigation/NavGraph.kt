@@ -66,7 +66,8 @@ fun MainNavGraph(
     searchText: String = String(),
     expand: Boolean = false,
     scrollToTop: Boolean = false,
-    onScrollToTop: () -> Unit
+    onScrollToTop: () -> Unit,
+    photoIdForShare: (String?) -> Unit
 ) {
 
     //TODO remember?
@@ -86,7 +87,8 @@ fun MainNavGraph(
             expand = expand,
             displayWidthHeight = displayWidthHeight,
             scrollToTop = scrollToTop,
-            onScrollToTop = onScrollToTop
+            onScrollToTop = onScrollToTop,
+            photoIdForShare = photoIdForShare
         )
 
         composable(
@@ -111,7 +113,8 @@ fun NavGraphBuilder.homeGraph(
     scrollToTop: Boolean = false,
     onScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
-    displayWidthHeight: Pair<Int, Int>
+    displayWidthHeight: Pair<Int, Int>,
+    photoIdForShare: (String?) -> Unit
 ) {
     composable(
         route = NavItem.Home.screenRoute
@@ -132,6 +135,7 @@ fun NavGraphBuilder.homeGraph(
         arguments = listOf(navArgument(PhotoDetailDestination.argName) { type = NavType.StringType })
     ) { backStackEntry ->
         val photoId = backStackEntry.arguments?.getString(PhotoDetailDestination.argName)
+        photoIdForShare(photoId)
         PhotoDetailScreen(
             photoId = photoId,
             modifier = modifier,

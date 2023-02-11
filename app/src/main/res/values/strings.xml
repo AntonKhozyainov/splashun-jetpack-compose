@@ -40,9 +40,13 @@
 
     <string name="no_location">There is no information about the location</string>
     <string name="location">%1$s, %2$s</string>
+    <string name="no_activities_for_display_location">No app to display the location</string>
 
     <string name="exif">Made with: %1$s\nModel: %2$s\nExposure: %3$s\nAperture: %4$s\nFocal Length: %5$s\nISO: %6$s</string>
     <string name="about">About %1$s:\n%2$s</string>
     <string name="downloads">Download (%1$s)</string>
+
+    <string name="share_photo_link">Share photo link</string>
+
 
 </resources>

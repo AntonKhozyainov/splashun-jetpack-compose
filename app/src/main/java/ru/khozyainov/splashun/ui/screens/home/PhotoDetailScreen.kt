@@ -1,6 +1,10 @@
 package ru.khozyainov.splashun.ui.screens.home
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -55,13 +59,13 @@ fun PhotoDetailScreen(
 
     val photo by uiState.photoDetailFlow.collectAsState(initial = null)
 
-    if (uiState.errorMessage.isNotBlank()){
+    if (uiState.errorMessage.isNotBlank()) {
         ExceptionScreen(
             exceptionMessage = uiState.errorMessage
-        ){
+        ) {
             photoDetailViewModel.refreshState()
         }
-    }else{
+    } else {
         if (photo == null) {
             LoadingScreen()
         } else {
@@ -87,10 +91,7 @@ fun PhotoDetailScreen(
                 )
                 PhotoLocation(
                     photo = photo!!,
-                    modifier = modifier,
-                    onClickLocation = {
-                        //TODO
-                    }
+                    modifier = modifier
                 )
                 PhotoTags(
                     photo = photo!!,
@@ -109,13 +110,9 @@ fun PhotoDetailScreen(
                         //TODO
                     }
                 )
-
             }
         }
     }
-
-
-
 }
 
 @Composable
@@ -223,15 +220,18 @@ fun PhotoTags(
 @Composable
 fun PhotoLocation(
     photo: PhotoDetail,
-    modifier: Modifier = Modifier,
-    onClickLocation: () -> Unit
+    modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 16.dp)
             .clickable {
-                onClickLocation()
+                showLocationOnMap(
+                    context = context,
+                    photo = photo
+                )
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
@@ -248,7 +248,7 @@ fun PhotoLocation(
         Text(
             modifier = modifier,
             style = MaterialTheme.typography.body1,
-            text = getLocationString(photo, LocalContext.current),
+            text = getLocationString(photo, context),
             color = MaterialTheme.colors.onBackground
         )
     }
@@ -382,7 +382,6 @@ fun PhotoCardDetail(
                     Spacer(modifier = modifier.padding(2.dp))
 
                     Image(
-                        //painter = painterResource(id = if (photo.like) R.drawable.ic_like else R.drawable.ic_like_empty),
                         painter = painterResource(id = if (like) R.drawable.ic_like else R.drawable.ic_like_empty),
                         contentDescription = stringResource(id = R.string.like_icon),
                         modifier = modifier
@@ -399,7 +398,10 @@ fun PhotoCardDetail(
     }
 }
 
-private fun getLocationString(photo: PhotoDetail, context: Context): String =
+private fun getLocationString(
+    photo: PhotoDetail,
+    context: Context
+): String =
     if (photo.location.city.isEmpty() && photo.location.country.isEmpty()) context.getString(R.string.no_location)
     else {
         when {
@@ -412,3 +414,29 @@ private fun getLocationString(photo: PhotoDetail, context: Context): String =
             )
         }
     }
+
+private fun showLocationOnMap(
+    photo: PhotoDetail,
+    context: Context,
+) {
+    val longitude = photo.location.longitude
+    val latitude = photo.location.latitude
+    val address = "${photo.location.country} ${photo.location.city}"
+
+    if (longitude == 0.0 && latitude == 0.0 && address.trim().isBlank()) {
+        Toast.makeText(context, R.string.no_location, Toast.LENGTH_LONG).show()
+    } else {
+
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:$latitude,$longitude?q=$address"))
+
+        intent.setPackage("com.google.android.apps.maps")
+
+        try {
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(context, R.string.no_activities_for_display_location, Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+}
