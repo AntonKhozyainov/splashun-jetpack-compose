@@ -23,6 +23,7 @@
 
     <string name="search_icon">Search icon</string>
     <string name="share_icon">Share icon</string>
+    <string name="close_icon">Close icon</string>
     <string name="location_icon">Location icon</string>
     <string name="download_icon">Download icon</string>
 
@@ -45,8 +46,17 @@
     <string name="exif">Made with: %1$s\nModel: %2$s\nExposure: %3$s\nAperture: %4$s\nFocal Length: %5$s\nISO: %6$s</string>
     <string name="about">About %1$s:\n%2$s</string>
     <string name="downloads">Download (%1$s)</string>
+    <string name="photo_uploaded_snack_bar">Photo was successfully uploaded</string>
+    <string name="no_internet_snack_bar">No internet connection</string>
 
     <string name="share_photo_link">Share photo link</string>
+
+    <string name="external_not_available">External storage is not available</string>
+
+    <string name="notification_channel_name">Verbose DownloadManager notifications</string>
+    <string name="notification_channel_description">Shows notifications when the work of downloading photos begins</string>
+    <string name="download">Download</string>
+    <string name="notification_downloading">The photo is downloading…</string>
 
 
 </resources>

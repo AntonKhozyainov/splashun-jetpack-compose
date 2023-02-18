@@ -1,10 +1,7 @@
 package ru.khozyainov.splashun.data.network.api
 
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.create
 import retrofit2.http.*
 import ru.khozyainov.splashun.data.db.entities.PhotoEntity
 import ru.khozyainov.splashun.data.db.entities.SearchPhoto
@@ -41,4 +38,8 @@ interface PhotoApi {
         @Path("id") id: String
     ): Call<AbbreviatedPhotoParentRemote>
 
+    @GET
+    suspend fun downloadPhoto(
+        @Url url: String
+    ): ResponseBody
 }

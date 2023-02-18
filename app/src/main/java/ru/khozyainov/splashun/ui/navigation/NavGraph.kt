@@ -67,7 +67,9 @@ fun MainNavGraph(
     expand: Boolean = false,
     scrollToTop: Boolean = false,
     onScrollToTop: () -> Unit,
-    photoIdForShare: (String?) -> Unit
+    photoIdForShare: (String?) -> Unit,
+    photoDownloaded: (String) -> Unit,
+    userNotifiedThatPhotoDownloaded: Boolean = false
 ) {
 
     //TODO remember?
@@ -88,7 +90,9 @@ fun MainNavGraph(
             displayWidthHeight = displayWidthHeight,
             scrollToTop = scrollToTop,
             onScrollToTop = onScrollToTop,
-            photoIdForShare = photoIdForShare
+            photoIdForShare = photoIdForShare,
+            photoDownloaded = photoDownloaded,
+            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
         )
 
         composable(
@@ -114,7 +118,9 @@ fun NavGraphBuilder.homeGraph(
     onScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
-    photoIdForShare: (String?) -> Unit
+    photoIdForShare: (String?) -> Unit,
+    photoDownloaded: (String) -> Unit,
+    userNotifiedThatPhotoDownloaded: Boolean = false
 ) {
     composable(
         route = NavItem.Home.screenRoute
@@ -139,7 +145,9 @@ fun NavGraphBuilder.homeGraph(
         PhotoDetailScreen(
             photoId = photoId,
             modifier = modifier,
-            displayWidthHeight = displayWidthHeight
+            displayWidthHeight = displayWidthHeight,
+            photoDownloaded = photoDownloaded,
+            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
         )
     }
 }

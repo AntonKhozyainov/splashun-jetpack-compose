@@ -51,6 +51,7 @@ object PhotoRemoteContract {
 
     object Image {
         const val IMAGE_RAW = "raw"
+        const val IMAGE_FULL = "full"
     }
 
     object Author {

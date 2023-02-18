@@ -51,13 +51,24 @@ fun PhotoDetailScreen(
     photoId: String?,
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
-    photoDetailViewModel: PhotoDetailViewModel = hiltViewModel()
+    photoDetailViewModel: PhotoDetailViewModel = hiltViewModel(),
+    photoDownloaded: (String) -> Unit,
+    userNotifiedThatPhotoDownloaded: Boolean = false
 ) {
 
     photoDetailViewModel.getPhotoById(photoId)
     val uiState by photoDetailViewModel.uiPhotoDetailState.collectAsState()
 
-    val photo by uiState.photoDetailFlow.collectAsState(initial = null)
+    if (userNotifiedThatPhotoDownloaded){
+        photoDetailViewModel.cancelWork()
+    }
+
+    if (uiState.downloadPhotoUri.isNotEmpty() && !userNotifiedThatPhotoDownloaded){
+        photoDownloaded(uiState.downloadPhotoUri)
+        //Toast.makeText(LocalContext.current, uiState.downloadPhotoLink, Toast.LENGTH_LONG).show()
+    }
+
+    val photo = uiState.photoDetail
 
     if (uiState.errorMessage.isNotBlank()) {
         ExceptionScreen(
@@ -78,36 +89,36 @@ fun PhotoDetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 PhotoCardDetail(
-                    photo = photo!!,
+                    photo = photo,
                     like = uiState.like,
                     likes = uiState.likes,
                     modifier = modifier,
                     displayWidthHeight = displayWidthHeight,
                     onClickLike = {
-                        //LaunchedEffect(photo) {
                         photoDetailViewModel.setLike()
-                        //}
                     }
                 )
+
                 PhotoLocation(
-                    photo = photo!!,
+                    photo = photo,
                     modifier = modifier
                 )
+
                 PhotoTags(
-                    photo = photo!!,
+                    photo = photo,
                     modifier = modifier,
                 )
 
                 PhotoMadeAbout(
-                    photo = photo!!,
+                    photo = photo,
                     modifier = modifier,
                 )
 
                 PhotoDownload(
-                    photo = photo!!,
+                    photo = photo,
                     modifier = modifier,
                     onClickDownload = {
-                        //TODO
+                        photoDetailViewModel.downloadPhoto()
                     }
                 )
             }
@@ -434,7 +445,8 @@ private fun showLocationOnMap(
         try {
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(context, R.string.no_activities_for_display_location, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.no_activities_for_display_location, Toast.LENGTH_LONG)
+                .show()
         }
 
     }

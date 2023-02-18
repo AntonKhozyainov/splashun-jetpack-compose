@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+<!--    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>-->
+<!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>-->
 
     <application
         android:name=".SplashUnApplication"
@@ -29,6 +33,18 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
     </application>
 
 </manifest>

@@ -10,6 +10,8 @@ import ru.khozyainov.splashun.data.repository.onboarding.OnBoardingRepository
 import ru.khozyainov.splashun.data.repository.onboarding.OnBoardingRepositoryImpl
 import ru.khozyainov.splashun.data.repository.photo.PhotoRepository
 import ru.khozyainov.splashun.data.repository.photo.PhotoRepositoryImpl
+import ru.khozyainov.splashun.data.repository.workmanager.WorkManagerRepository
+import ru.khozyainov.splashun.data.repository.workmanager.WorkManagerRepositoryImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -23,4 +25,8 @@ abstract class RepositoriesModule {
 
     @Binds
     abstract fun provideOnBoardingRepository(onBoardingRepositoryImpl: OnBoardingRepositoryImpl): OnBoardingRepository
+
+    @Binds
+    abstract fun provideWorkManagerRepository(workManagerRepositoryImpl: WorkManagerRepositoryImpl): WorkManagerRepository
+
 }

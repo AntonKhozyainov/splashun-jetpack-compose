@@ -18,6 +18,7 @@ class PhotoDetailAdapterJSON {
             height = photoDetailRemote.height,
             placeholder = photoDetailRemote.blur,
             image = photoDetailRemote.image.imageRaw,
+            imageForDownload = photoDetailRemote.image.imageFull,
             like = photoDetailRemote.likeByUser,
             likes = photoDetailRemote.likes,
             author = Author(
@@ -71,7 +72,8 @@ class PhotoDetailAdapterJSON {
         ),
         tags = listOf(),
         image = ImagesRemote(
-            imageRaw = photoDetails.image
+            imageRaw = photoDetails.image,
+            imageFull = photoDetails.imageForDownload,
         ),
         author = AuthorRemote(
             name = photoDetails.author.name,

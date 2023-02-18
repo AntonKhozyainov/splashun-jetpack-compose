@@ -6,6 +6,7 @@ data class PhotoDetail(
     val height: Int,
     val placeholder: String,
     val image: String,
+    val imageForDownload: String,
     val like: Boolean,
     val likes: Long,
     val author: Author,
