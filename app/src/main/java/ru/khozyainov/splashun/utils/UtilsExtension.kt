@@ -1,5 +1,6 @@
 package ru.khozyainov.splashun.utils
 
+import android.app.ActivityManager
 import android.content.Context
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
@@ -23,4 +24,19 @@ fun Long.getLikeCountString(): String = when {
         this.toString().substring(0, this.toString().length - 3)
     }k"
     else -> this.toString()
+}
+
+fun Context.isAppInForeground(): Boolean {
+
+    val application = this.applicationContext
+    val activityManager = this.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val runningProcessList = activityManager.runningAppProcesses
+
+    if (runningProcessList != null) {
+        val myApp = runningProcessList.find { it.processName == application.packageName }
+        ActivityManager.getMyMemoryState(myApp)
+        return myApp?.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+    }
+
+    return false
 }

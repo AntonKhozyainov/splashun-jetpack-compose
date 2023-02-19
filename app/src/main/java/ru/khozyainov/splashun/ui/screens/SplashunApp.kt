@@ -344,7 +344,7 @@ fun SplashUnDownloadPhotoSnackBar(
         }
     ) {
         Text(
-            text = stringResource(id = R.string.photo_uploaded_snack_bar),
+            text = stringResource(id = R.string.photo_downloaded),
             style = MaterialTheme.typography.h3,
             color = MaterialTheme.colors.onBackground,
             modifier = modifier

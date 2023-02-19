@@ -65,7 +65,6 @@ fun PhotoDetailScreen(
 
     if (uiState.downloadPhotoUri.isNotEmpty() && !userNotifiedThatPhotoDownloaded){
         photoDownloaded(uiState.downloadPhotoUri)
-        //Toast.makeText(LocalContext.current, uiState.downloadPhotoLink, Toast.LENGTH_LONG).show()
     }
 
     val photo = uiState.photoDetail
@@ -115,7 +114,7 @@ fun PhotoDetailScreen(
                 )
 
                 PhotoDownload(
-                    photo = photo,
+                    photoDownloadCount = uiState.downloadCount,
                     modifier = modifier,
                     onClickDownload = {
                         photoDetailViewModel.downloadPhoto()
@@ -128,7 +127,7 @@ fun PhotoDetailScreen(
 
 @Composable
 fun PhotoDownload(
-    photo: PhotoDetail,
+    photoDownloadCount: Int,
     modifier: Modifier = Modifier,
     onClickDownload: () -> Unit
 ) {
@@ -148,7 +147,7 @@ fun PhotoDownload(
             Text(
                 text = stringResource(
                     id = R.string.downloads,
-                    photo.downloads.toString()
+                    photoDownloadCount.toString()
                 ).underLine(),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.onBackground

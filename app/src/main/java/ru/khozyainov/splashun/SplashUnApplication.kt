@@ -2,6 +2,8 @@ package ru.khozyainov.splashun
 
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import ru.khozyainov.splashun.notifications.SplashUnNotifications

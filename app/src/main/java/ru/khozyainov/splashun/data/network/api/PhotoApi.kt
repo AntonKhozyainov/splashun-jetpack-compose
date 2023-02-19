@@ -42,4 +42,9 @@ interface PhotoApi {
     suspend fun downloadPhoto(
         @Url url: String
     ): ResponseBody
+
+    @GET("/photos/{id}/download")
+    fun notifyDownload(
+        @Path("id") id: String
+    ): Call<Boolean>
 }

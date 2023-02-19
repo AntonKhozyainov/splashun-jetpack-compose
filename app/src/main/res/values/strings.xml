@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SplashUn</string>
-
     <string name="onboarding_page_1">Create a photo, publish it, gather an audience, get feedback!</string>
     <string name="onboarding_page_2">Share with friends, build collections!</string>
     <string name="onboarding_page_3">Upload your favorite photos and keep track of statistics!</string>
@@ -46,7 +45,7 @@
     <string name="exif">Made with: %1$s\nModel: %2$s\nExposure: %3$s\nAperture: %4$s\nFocal Length: %5$s\nISO: %6$s</string>
     <string name="about">About %1$s:\n%2$s</string>
     <string name="downloads">Download (%1$s)</string>
-    <string name="photo_uploaded_snack_bar">Photo was successfully uploaded</string>
+    <string name="photo_downloaded">Photo was successfully downloaded</string>
     <string name="no_internet_snack_bar">No internet connection</string>
 
     <string name="share_photo_link">Share photo link</string>

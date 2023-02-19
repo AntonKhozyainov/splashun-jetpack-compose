@@ -48,6 +48,7 @@ class PhotoDetailViewModel @Inject constructor(
             photoDetailFlow.collect { photoDetail ->
                 _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
                     photoDetail = photoDetail,
+                    downloadCount = photoDetail.downloads,
                     like = photoDetail.like,
                     likes = photoDetail.likes,
                     errorMessage = String()
@@ -104,6 +105,10 @@ class PhotoDetailViewModel @Inject constructor(
     fun downloadPhoto() {
         val photoDetail = _uiPhotoDetailState.value.photoDetail ?: return
 
+        _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
+            downloadCount = _uiPhotoDetailState.value.downloadCount + 1
+        )
+
         workManagerRepository.downloadPhoto(
             photoDetail.imageForDownload,
             photoDetail.id
@@ -139,6 +144,7 @@ class PhotoDetailViewModel @Inject constructor(
     data class PhotoDetailScreenState(
         val photoDetail: PhotoDetail? = null,
         val downloadPhotoUri: String = String(),
+        val downloadCount: Int = 0,
         val like: Boolean = false,
         val likes: Long = 0,
         val errorMessage: String = String()

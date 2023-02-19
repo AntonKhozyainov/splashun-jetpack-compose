@@ -1,11 +1,8 @@
 package ru.khozyainov.splashun.data.repository.workmanager
 
-import androidx.lifecycle.asFlow
 import androidx.work.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
 import ru.khozyainov.splashun.workers.DownloadWorker
-import ru.khozyainov.splashun.workers.DownloadWorker.Companion.DOWNLOAD_FILE_NAME_KEY
+import ru.khozyainov.splashun.workers.DownloadWorker.Companion.DOWNLOAD_PHOTO_ID_KEY
 import ru.khozyainov.splashun.workers.DownloadWorker.Companion.DOWNLOAD_URL_KEY
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -24,7 +21,7 @@ class WorkManagerRepositoryImpl @Inject constructor(
 
     override fun downloadPhoto(url: String, photoId: String) {
         //Для передачи в worker аргументов используем Data, аналог Bundle для воркера
-        val workData = workDataOf(DOWNLOAD_URL_KEY to url, DOWNLOAD_FILE_NAME_KEY to photoId)
+        val workData = workDataOf(DOWNLOAD_URL_KEY to url, DOWNLOAD_PHOTO_ID_KEY to photoId)
 
 
         //Указываем условия выполнения работы
