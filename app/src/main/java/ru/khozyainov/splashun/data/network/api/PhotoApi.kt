@@ -2,6 +2,7 @@ package ru.khozyainov.splashun.data.network.api
 
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 import ru.khozyainov.splashun.data.db.entities.PhotoEntity
 import ru.khozyainov.splashun.data.db.entities.SearchPhoto
@@ -46,5 +47,5 @@ interface PhotoApi {
     @GET("/photos/{id}/download")
     fun notifyDownload(
         @Path("id") id: String
-    ): Call<Boolean>
+    ): Call<ResponseBody>
 }

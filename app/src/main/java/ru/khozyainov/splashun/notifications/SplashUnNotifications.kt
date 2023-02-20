@@ -3,7 +3,6 @@ package ru.khozyainov.splashun.notifications
 import android.app.*
 import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri

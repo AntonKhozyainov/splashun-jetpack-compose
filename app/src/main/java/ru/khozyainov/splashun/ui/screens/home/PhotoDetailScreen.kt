@@ -114,7 +114,7 @@ fun PhotoDetailScreen(
                 )
 
                 PhotoDownload(
-                    photoDownloadCount = uiState.downloadCount,
+                    photoDownloadCount = photo.downloads,
                     modifier = modifier,
                     onClickDownload = {
                         photoDetailViewModel.downloadPhoto()

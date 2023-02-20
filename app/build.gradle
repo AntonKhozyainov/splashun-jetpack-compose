@@ -78,9 +78,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
-    //implementation "androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1"
-//    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.5.1"
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
     //Compose
     implementation "androidx.compose.ui:ui:$compose_ui_version"
@@ -96,7 +93,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
 
     //DataStore Preferences
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     //Dagger hilt
     implementation "com.google.dagger:hilt-android:$dagger_hilt_version"

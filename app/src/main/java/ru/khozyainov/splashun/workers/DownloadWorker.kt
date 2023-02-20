@@ -23,9 +23,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.data.network.api.PhotoApi
 import ru.khozyainov.splashun.notifications.SplashUnNotifications.cancelProgressNotification
@@ -34,7 +31,6 @@ import ru.khozyainov.splashun.notifications.SplashUnNotifications.makeProgressNo
 import ru.khozyainov.splashun.utils.isAppInForeground
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.RuntimeException
 import java.util.*
 
 @HiltWorker
@@ -57,23 +53,29 @@ class DownloadWorker @AssistedInject constructor(
                     inputData.getString(DOWNLOAD_URL_KEY) ?: return@withContext Result.failure()
 
                 val photoId =
-                    inputData.getString(DOWNLOAD_PHOTO_ID_KEY) ?: return@withContext Result.failure()
+                    inputData.getString(DOWNLOAD_PHOTO_ID_KEY)
+                        ?: return@withContext Result.failure()
 
                 makeProgressNotification(applicationContext, photoId)
 
-                //notifyDownload(photoId)//TODO
+                val response = photoApi.notifyDownload(photoId).execute()
+                if (!response.isSuccessful){
+                    return@withContext Result.failure(
+                        workDataOf(TAG_OUTPUT_FAILURE to "failed to execute notifyDownload") //TODO
+                    )
+                }
 
                 val fileUriBitmap = downloadAndSavePhoto("$photoId.png", imageUri)
                 val fileUri = fileUriBitmap.first
                 val bitmap = fileUriBitmap.second
 
-                if (fileUri.isEmpty()){
+                if (fileUri.isEmpty()) {
                     cancelProgressNotification(applicationContext, photoId)
                     Result.failure(
                         workDataOf(TAG_OUTPUT_FAILURE to "File uri = null") //TODO
                     )
 
-                }else{
+                } else {
                     cancelProgressNotification(applicationContext, photoId)
 
                     if (!applicationContext.isAppInForeground()) {
@@ -115,10 +117,14 @@ class DownloadWorker @AssistedInject constructor(
                     bitmap.compress(PNG, 100, it)
                 }
             }
-            MediaScannerConnection.scanFile(applicationContext,
-                arrayOf(file.absolutePath), null, null)
-            FileProvider.getUriForFile(applicationContext,
-                "${ applicationContext.packageName }.provider", file)
+            MediaScannerConnection.scanFile(
+                applicationContext,
+                arrayOf(file.absolutePath), null, null
+            )
+            FileProvider.getUriForFile(
+                applicationContext,
+                "${applicationContext.packageName}.provider", file
+            )
         } else {
             val values = ContentValues().apply {
                 put(DISPLAY_NAME, fileName)
@@ -137,37 +143,14 @@ class DownloadWorker @AssistedInject constructor(
             values.clear()
             values.put(IS_PENDING, 0)
             uri?.also {
-                resolver.update(it, values, null, null) }
+                resolver.update(it, values, null, null)
+            }
         }.toString()
 
         return fileUri to bitmap
     }
 
-    private fun notifyDownload(
-        photoId: String,
-        onCompleteCallback: (Boolean) -> Unit,
-        onErrorCallback: (Throwable) -> Unit
-    ){
-        photoApi.notifyDownload(photoId).enqueue(
-            object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    when(response.code()){
-                        204 -> onCompleteCallback(true)
-                        404 -> onCompleteCallback(false)
-                        else -> onErrorCallback(RuntimeException("Incorrect status code = ${response.message()}"))
-                    }
-                }
-
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    onErrorCallback(t)
-                }
-
-            }
-        )
-    }
-
     companion object {
-        private const val PACKAGE_NAME = "ru.khozyainov.splashun"
         const val TAG_OUTPUT_SUCCESS = "OUTPUT_SUCCESS"
         const val TAG_OUTPUT_FAILURE = "OUTPUT_FAILURE"
         const val DOWNLOAD_URL_KEY = "data_uri_key"
