@@ -7,6 +7,7 @@ object PhotoContract {
     object Columns {
         const val ID = "id"
         const val PHOTO_RAW = "photo_raw"
+        const val PLACEHOLDER = "photo_placeholder"
         const val LIKE = "photo_like"
         const val LIKES = "likes"
         const val AUTHOR = "author"

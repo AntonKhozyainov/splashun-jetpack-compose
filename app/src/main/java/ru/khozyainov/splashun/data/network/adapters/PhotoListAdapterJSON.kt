@@ -13,6 +13,7 @@ class PhotoListAdapterJSON {
             PhotoEntity(
                 id = itemPhotoRemote.id,
                 image = itemPhotoRemote.images.imageRaw,
+                placeholder = itemPhotoRemote.blur,
                 like = itemPhotoRemote.likeByUser,
                 likes = itemPhotoRemote.likes,
                 author = itemPhotoRemote.author.name,

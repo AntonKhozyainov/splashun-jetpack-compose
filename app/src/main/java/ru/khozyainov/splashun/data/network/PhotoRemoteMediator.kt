@@ -59,7 +59,7 @@ class PhotoRemoteMediator @AssistedInject constructor(
             list.add(
                 PhotoEntity(
                     id = "id_${Random.nextInt()}",
-                    //placeholder = "LEHLh[WB2yk8pyoJadR*.7kCMdnj",
+                    placeholder = "LEHLh[WB2yk8pyoJadR*.7kCMdnj",
                     image = "this.image",
                     like = Random.nextBoolean(),
                     likes = Random.nextInt(0, 10000000).toLong(),

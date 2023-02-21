@@ -35,6 +35,12 @@ import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
 import ru.khozyainov.splashun.utils.underLine
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import coil.compose.AsyncImagePainter.State.Empty.painter
+import ru.khozyainov.splashun.utils.BlurHashDecoder
+import ru.khozyainov.splashun.utils.forwardingPainter
 import ru.khozyainov.splashun.utils.getLikeCountString
 
 object PhotoDetailDestination : NavigationDestination {
@@ -287,6 +293,8 @@ fun PhotoCardDetail(
     val width = displayWidthHeight.first
     val height = (photo.height.toDouble() / photo.width.toDouble() * width).toInt()
 
+    val blurHashBitmap = BlurHashDecoder.decode(photo.placeholder, width, height)
+
     Card(
         modifier = modifier
             .padding(4.dp)
@@ -308,7 +316,13 @@ fun PhotoCardDetail(
                         .build(),
                     contentDescription = stringResource(id = R.string.photo),
                     contentScale = ContentScale.FillBounds,
-                    placeholder = painterResource(id = R.drawable.ic_photo_placeholder),
+                    //placeholder = painterResource(id = R.drawable.ic_photo_placeholder),
+                    placeholder = forwardingPainter(
+                        painter = if (blurHashBitmap != null)
+                            BitmapPainter(blurHashBitmap.asImageBitmap())
+                        else
+                            painterResource(id = R.drawable.ic_photo_placeholder)
+                    ),
                     error = painterResource(id = R.drawable.ic_loading_error)
                 )
             }

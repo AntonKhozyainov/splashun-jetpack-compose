@@ -3,6 +3,7 @@ package ru.khozyainov.splashun.data.network.models
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.AbbreviatedPhoto.USER
+import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.BLUR
 import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.ID
 import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.IMAGE_HEIGHT
 import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.IMAGE_URLS
@@ -13,6 +14,7 @@ import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.LIKE
 @JsonClass(generateAdapter = true)
 data class PhotoRemote(
     @Json(name = ID) val id: String,
+    @Json(name = BLUR) val blur: String,
     @Json(name = LIKES) val likes: Long,
     @Json(name = LIKE_BY_USER) val likeByUser: Boolean,
     @Json(name = USER) val author: AuthorRemote,

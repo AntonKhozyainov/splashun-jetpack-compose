@@ -1,5 +1,6 @@
 package ru.khozyainov.splashun.ui.screens.home
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,6 +33,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.models.Photo
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
@@ -42,6 +45,12 @@ import ru.khozyainov.splashun.utils.getLikeCountString
 object RibbonDestination : NavigationDestination {
     override val route: String = "ribbon"
     override val titleRes: Int = R.string.ribbon
+}
+
+private enum class PhotoLoadState {
+    SUCCESS,
+    LOADING,
+    ERROR
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -58,102 +67,104 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
 
     homeViewModel.setSearchBy(searchText)
-    val uiState = homeViewModel.uiHomeState.collectAsState()
+    val uiState by homeViewModel.uiHomeState.collectAsState()
 
-    //val coroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
-    val photoList = uiState.value.photoFlow.collectAsLazyPagingItems()
+    val photoList = uiState.pagingPhotoFlow.collectAsLazyPagingItems()
 
     val refreshing = remember { mutableStateOf(false) }
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing.value,
         onRefresh = {
-            homeViewModel.refresh()
+            coroutineScope.launch {
+                refreshing.value = true
+                homeViewModel.refresh()
+                delay(500)
+                refreshing.value = false
+            }
         }
     )
 
-    if (uiState.value.errorMessage.isNotBlank()) {
+    if (uiState.errorMessage.isNotBlank()) {
         ExceptionScreen(
-            exceptionMessage = uiState.value.errorMessage
+            exceptionMessage = uiState.errorMessage
         ) {
             homeViewModel.refreshState()
         }
     } else {
-        if (photoList.loadState.refresh == LoadState.Loading) {
-            LoadingScreen()
-        } else {
-            Box(
+
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState)
+        ) {
+
+            LazyColumn(
                 modifier = modifier
-                    .fillMaxSize()
-                    .pullRefresh(pullRefreshState)
+                    //.animateItemPlacement()
+                    .fillMaxSize(),
+                contentPadding = PaddingValues(all = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                state = listState
+
             ) {
+                if (!refreshing.value) {
 
-                LazyColumn(
-                    modifier = modifier
-                        //.animateItemPlacement()
-                        .fillMaxSize(),
-                    contentPadding = PaddingValues(all = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    state = listState
+                    item {
+                        PhotoListTitle(
+                            modifier = modifier,
+                            searchText = searchText
+                        )
+                    }
 
-                ) {
-                    if (!refreshing.value) {
-
-                        item {
-                            PhotoListTitle(
-                                modifier = modifier,
-                                searchText = searchText
-                            )
+                    items(
+                        items = photoList,
+                        key = { photo ->
+                            photo.id
                         }
-
-                        items(
-                            items = photoList,
-                            key = { photo ->
-                                photo.id
-                            }
-                        ) { photo ->
-                            PhotoCard(
-                                modifier = modifier,
-                                photo = photo,
-                                displayWidthHeight = displayWidthHeight,
-                                onClickLike = {
-                                    photo?.let {
-                                        homeViewModel.setLike(photo)
-                                    }
-                                },
-                                onClickCard = { photoId ->
-                                    navController.navigate("${RibbonDestination.route}/$photoId")
+                    ) { photo ->
+                        PhotoCard(
+                            modifier = modifier,
+                            photo = photo,
+                            displayWidthHeight = displayWidthHeight,
+                            onClickLike = {
+                                photo?.let {
+                                    homeViewModel.setLike(photo)
                                 }
-                            )
-                        }
-                    }
-
-                    if (photoList.loadState.append == LoadState.Loading) {
-                        item {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentWidth(Alignment.CenterHorizontally)
-                            )
-                        }
+                            },
+                            onClickCard = { photoId ->
+                                navController.navigate("${RibbonDestination.route}/$photoId")
+                            }
+                        )
                     }
                 }
 
-                // Animate scroll to the first item
-                if (scrollToTop) {
-                    LaunchedEffect(listState) {
-                        listState.animateScrollToItem(index = 0)
-                        onScrollToTop()
+                if (photoList.loadState.append == LoadState.Loading) {
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.CenterHorizontally)
+                        )
                     }
                 }
-
-                PullRefreshIndicator(
-                    refreshing.value,
-                    pullRefreshState,
-                    Modifier.align(Alignment.TopCenter)
-                )
             }
+
+            // Animate scroll to the first item
+            if (scrollToTop) {
+                LaunchedEffect(listState) {
+                    listState.animateScrollToItem(index = 0)
+                    onScrollToTop()
+                }
+            }
+
+            PullRefreshIndicator(
+                refreshing.value,
+                pullRefreshState,
+                Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }
@@ -220,17 +231,10 @@ fun PhotoCard(
         }
     } else {
 
-
-//        val displayWidth = displayWidthHeight.first
-//
-//        val heightRatio =
-//            (photo.height.toDouble() / photo.width.toDouble() * displayWidth).toInt()
-//
-//        val width = displayWidth / 2
-//        val height = heightRatio / 2
-
         val width = displayWidthHeight.first
         val height = (photo.height.toDouble() / photo.width.toDouble() * width).toInt()
+
+
 
         Card(
             modifier = modifier
@@ -249,20 +253,51 @@ fun PhotoCard(
                 Box(
                     modifier = modifier
                         .fillMaxSize(),
-                    //.size(width = width.fromPixelsToDp(context).dp, height = height.fromPixelsToDp(context).dp),
                     contentAlignment = Alignment.Center
                 ) {
+
+                    val photoLoadState = remember {
+                        mutableStateOf(PhotoLoadState.LOADING)
+                    }
+
                     AsyncImage(
                         model = ImageRequest.Builder(context = context)
                             .data(photo.image + "&fm=pjpg&w=$width&h=$height&fit=clamp")
-                            //.data("photo.image")
                             .crossfade(true)
                             .build(),
                         contentDescription = stringResource(id = R.string.photo),
                         contentScale = ContentScale.FillBounds,
-                        placeholder = painterResource(id = R.drawable.ic_photo_placeholder),
-                        error = painterResource(id = R.drawable.ic_loading_error)
+                        onLoading = {
+                            photoLoadState.value = PhotoLoadState.LOADING
+                        },
+                        onSuccess = {
+                            photoLoadState.value = PhotoLoadState.SUCCESS
+                        },
+                        onError = {
+                            photoLoadState.value = PhotoLoadState.ERROR
+                        }
                     )
+
+                    AnimatedVisibility(
+                        visible = photoLoadState.value == PhotoLoadState.LOADING || photoLoadState.value == PhotoLoadState.ERROR
+                    ) {
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .height(200.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = if (photoLoadState.value == PhotoLoadState.LOADING) {
+                                    painterResource(id = R.drawable.ic_photo_placeholder)
+                                } else {
+                                    painterResource(id = R.drawable.ic_loading_error)
+                                },
+                                contentDescription = null
+                            )
+                        }
+                    }
+
                 }
 
                 Row(

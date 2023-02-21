@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val photoRepository: PhotoRepository
-) : ViewModel(){
+) : ViewModel() {
 
     private val _uiHomeState = MutableStateFlow(HomeScreenState())
     val uiHomeState: StateFlow<HomeScreenState> = _uiHomeState.asStateFlow()
@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
 
     fun refreshState() {
 
-        val photoFlow = searchBy.asFlow()
+        val pagingPhotoFlow = searchBy.asFlow()
             .debounce(500)
             .flatMapLatest { searchString ->
                 photoRepository.getPhotos(searchString)
@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
         _uiHomeState.value = _uiHomeState.value.copy(
-            photoFlow = photoFlow,
+            pagingPhotoFlow = pagingPhotoFlow,
             errorMessage = String()
         )
     }
@@ -80,7 +80,7 @@ class HomeViewModel @Inject constructor(
         this.searchBy.postValue(this.searchBy.value)
     }
 
-    private fun setRefreshPhoto(abbreviatedPhotoRemote: AbbreviatedPhotoRemote){
+    private fun setRefreshPhoto(abbreviatedPhotoRemote: AbbreviatedPhotoRemote) {
         viewModelScope.launch(errorHandler) {
             photoRepository.setRefreshPhotoToDataBase(abbreviatedPhotoRemote)
         }
@@ -94,7 +94,7 @@ class HomeViewModel @Inject constructor(
     }
 
     data class HomeScreenState(
-        val photoFlow: Flow<PagingData<Photo>> = emptyFlow(),
+        val pagingPhotoFlow: Flow<PagingData<Photo>> = emptyFlow(),
         val errorMessage: String = String()
     )
 

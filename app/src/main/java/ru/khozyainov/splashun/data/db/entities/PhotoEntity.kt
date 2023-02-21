@@ -14,6 +14,7 @@ import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.ID
 import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.LIKE
 import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.LIKES
 import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.PHOTO_RAW
+import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.PLACEHOLDER
 import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.SEARCH
 import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.WIDTH
 import ru.khozyainov.splashun.data.db.entities.PhotoContract.TABLE_NAME
@@ -30,6 +31,7 @@ data class PhotoEntity(
     @PrimaryKey
     @ColumnInfo(name = ID) val id: String,
     @ColumnInfo(name = PHOTO_RAW) val image: String,
+    @ColumnInfo(name = PLACEHOLDER) val placeholder: String,
     @ColumnInfo(name = LIKE) val like: Boolean,
     @ColumnInfo(name = LIKES) val likes: Long,
     @ColumnInfo(name = AUTHOR) val author: String,
@@ -49,6 +51,7 @@ data class PhotoEntity(
         return Photo(
             id = this.id,
             image = this.image,
+            placeholder = this.placeholder,
             like = this.like,
             likes = this.likes,
             author = Author(
