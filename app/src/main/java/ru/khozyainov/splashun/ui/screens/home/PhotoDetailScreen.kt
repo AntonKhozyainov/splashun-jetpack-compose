@@ -5,12 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -59,11 +56,11 @@ fun PhotoDetailScreen(
     photoDetailViewModel.getPhotoById(photoId)
     val uiState by photoDetailViewModel.uiPhotoDetailState.collectAsState()
 
-    if (userNotifiedThatPhotoDownloaded){
+    if (userNotifiedThatPhotoDownloaded) {
         photoDetailViewModel.cancelWork()
     }
 
-    if (uiState.downloadPhotoUri.isNotEmpty() && !userNotifiedThatPhotoDownloaded){
+    if (uiState.downloadPhotoUri.isNotEmpty() && !userNotifiedThatPhotoDownloaded) {
         photoDownloaded(uiState.downloadPhotoUri)
     }
 
@@ -114,6 +111,7 @@ fun PhotoDetailScreen(
                 )
 
                 PhotoDownload(
+                    photoIsDownloading = uiState.photoIsDownloading,
                     photoDownloadCount = photo.downloads,
                     modifier = modifier,
                     onClickDownload = {
@@ -127,15 +125,18 @@ fun PhotoDetailScreen(
 
 @Composable
 fun PhotoDownload(
+    photoIsDownloading: Boolean,
     photoDownloadCount: Int,
     modifier: Modifier = Modifier,
     onClickDownload: () -> Unit
 ) {
+
     Row(
         modifier = modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
+
         Row(
             modifier = modifier
                 .padding(vertical = 4.dp, horizontal = 18.dp)
@@ -144,23 +145,31 @@ fun PhotoDownload(
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(
-                    id = R.string.downloads,
-                    photoDownloadCount.toString()
-                ).underLine(),
-                style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onBackground
-            )
+            if (photoIsDownloading) {
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .then(Modifier.size(22.dp)),
+                    color = MaterialTheme.colors.onBackground
+                )
+            } else {
+                Text(
+                    text = stringResource(
+                        id = R.string.downloads,
+                        photoDownloadCount.toString()
+                    ).underLine(),
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onBackground
+                )
 
-            Spacer(modifier = modifier.padding(4.dp))
+                Spacer(modifier = modifier.padding(4.dp))
 
-            Icon(
-                modifier = modifier.size(22.dp),
-                painter = painterResource(id = R.drawable.ic_download),
-                contentDescription = stringResource(id = R.string.download_icon),
-                tint = MaterialTheme.colors.onBackground,
-            )
+                Icon(
+                    modifier = modifier.size(22.dp),
+                    painter = painterResource(id = R.drawable.ic_download),
+                    contentDescription = stringResource(id = R.string.download_icon),
+                    tint = MaterialTheme.colors.onBackground,
+                )
+            }
         }
     }
 }

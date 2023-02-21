@@ -48,7 +48,7 @@ class PhotoDetailViewModel @Inject constructor(
             photoDetailFlow.collect { photoDetail ->
                 _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
                     photoDetail = photoDetail,
-                    //downloadCount = photoDetail.downloads,
+                    photoIsDownloading = false,
                     like = photoDetail.like,
                     likes = photoDetail.likes,
                     errorMessage = String()
@@ -105,9 +105,9 @@ class PhotoDetailViewModel @Inject constructor(
     fun downloadPhoto() {
         val photoDetail = _uiPhotoDetailState.value.photoDetail ?: return
 
-//        _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
-//            downloadCount = _uiPhotoDetailState.value.downloadCount + 1
-//        )
+        _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
+            photoIsDownloading = true
+        )
 
         workManagerRepository.downloadPhoto(
             photoDetail.imageForDownload,
@@ -124,7 +124,12 @@ class PhotoDetailViewModel @Inject constructor(
                 val errorMessage = info.outputData.getString(TAG_OUTPUT_FAILURE)
                 if (info.state.isFinished && !photoUri.isNullOrEmpty() && errorMessage.isNullOrEmpty()) {
                     _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
-                        downloadPhotoUri = photoUri
+                        downloadPhotoUri = photoUri,
+                        photoIsDownloading = false
+                    )
+                }else{
+                    _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
+                        photoIsDownloading = true
                     )
                 }
             }
@@ -144,7 +149,7 @@ class PhotoDetailViewModel @Inject constructor(
     data class PhotoDetailScreenState(
         val photoDetail: PhotoDetail? = null,
         val downloadPhotoUri: String = String(),
-        //val downloadCount: Int = 0,
+        val photoIsDownloading: Boolean = false,
         val like: Boolean = false,
         val likes: Long = 0,
         val errorMessage: String = String()
