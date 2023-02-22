@@ -172,6 +172,7 @@ fun SplashunApp(
                     modifier = modifier,
                     searchText = searchText.value,
                     scrollToTop = scrollToTop.value,
+                    connectionState = connection,
                     onScrollToTop = {
                         scrollToTop.value = false
                     },
@@ -240,6 +241,7 @@ fun SplashunApp(
                 modifier = modifier,
                 searchText = searchText.value,
                 scrollToTop = scrollToTop.value,
+                connectionState = connection,
                 onScrollToTop = {
                     scrollToTop.value = false
                 },

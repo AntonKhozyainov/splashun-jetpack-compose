@@ -40,6 +40,7 @@ import ru.khozyainov.splashun.ui.models.Photo
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
+import ru.khozyainov.splashun.utils.ConnectionState
 import ru.khozyainov.splashun.utils.getLikeCountString
 
 object RibbonDestination : NavigationDestination {
@@ -62,7 +63,8 @@ fun HomeScreen(
     expand: Boolean = false,
     displayWidthHeight: Pair<Int, Int>,
     onScrollToTop: () -> Unit,
-    scrollToTop: Boolean = false
+    scrollToTop: Boolean = false,
+    connectionState: ConnectionState
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
 
@@ -129,6 +131,7 @@ fun HomeScreen(
                             modifier = modifier,
                             photo = photo,
                             displayWidthHeight = displayWidthHeight,
+                            connectionState = connectionState,
                             onClickLike = {
                                 photo?.let {
                                     homeViewModel.setLike(photo)
@@ -215,7 +218,8 @@ fun PhotoCard(
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
     onClickLike: () -> Unit,
-    onClickCard: (String) -> Unit
+    onClickCard: (String) -> Unit,
+    connectionState: ConnectionState
 ) {
     val context = LocalContext.current
 
@@ -366,12 +370,15 @@ fun PhotoCard(
                     }
 
                     Row(
-                        modifier = modifier
-                            .clickable {
-                                onClickLike()
-                            },
+                        modifier = if (connectionState == ConnectionState.Available) {
+                            modifier
+                                .clickable {
+                                    onClickLike()
+                                }
+                        } else{
+                            modifier
+                        },
                         verticalAlignment = Alignment.CenterVertically,
-
                         ) {
                         Text(
                             text = photo.likes.getLikeCountString(),

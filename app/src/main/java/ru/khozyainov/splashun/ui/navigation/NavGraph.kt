@@ -17,6 +17,7 @@ import ru.khozyainov.splashun.ui.screens.home.PhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.home.PhotoDetailScreen
 import ru.khozyainov.splashun.ui.screens.login.LoginDestination
 import ru.khozyainov.splashun.ui.screens.login.LoginScreen
+import ru.khozyainov.splashun.utils.ConnectionState
 
 private const val DEEP_LINK_URI = "https://unsplash.com/photos"
 
@@ -72,7 +73,8 @@ fun MainNavGraph(
     onScrollToTop: () -> Unit,
     photoIdForShare: (String?) -> Unit,
     photoDownloaded: (String) -> Unit,
-    userNotifiedThatPhotoDownloaded: Boolean = false
+    userNotifiedThatPhotoDownloaded: Boolean = false,
+    connectionState: ConnectionState
 ) {
 
     //TODO remember?
@@ -95,7 +97,8 @@ fun MainNavGraph(
             onScrollToTop = onScrollToTop,
             photoIdForShare = photoIdForShare,
             photoDownloaded = photoDownloaded,
-            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
+            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded,
+            connectionState = connectionState
         )
 
         composable(
@@ -123,7 +126,8 @@ fun NavGraphBuilder.homeGraph(
     displayWidthHeight: Pair<Int, Int>,
     photoIdForShare: (String?) -> Unit,
     photoDownloaded: (String) -> Unit,
-    userNotifiedThatPhotoDownloaded: Boolean = false
+    userNotifiedThatPhotoDownloaded: Boolean = false,
+    connectionState: ConnectionState
 ) {
     composable(
         route = NavItem.Home.screenRoute
@@ -135,7 +139,8 @@ fun NavGraphBuilder.homeGraph(
             expand = expand,
             displayWidthHeight = displayWidthHeight,
             scrollToTop = scrollToTop,
-            onScrollToTop = onScrollToTop
+            onScrollToTop = onScrollToTop,
+            connectionState = connectionState
         )
     }
 
