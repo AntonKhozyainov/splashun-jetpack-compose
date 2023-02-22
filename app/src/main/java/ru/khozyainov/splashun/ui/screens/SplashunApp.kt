@@ -18,6 +18,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.navigation.MainNavGraph
@@ -45,8 +46,7 @@ object SplashunDestination : NavigationDestination {
 @Composable
 fun SplashunApp(
     modifier: Modifier = Modifier,
-    expand: Boolean = false,
-    // splashUnAppViewModel: SplashUnAppViewModel = hiltViewModel()
+    expand: Boolean = false
 ) {
 
     //val scope = rememberCoroutineScope()

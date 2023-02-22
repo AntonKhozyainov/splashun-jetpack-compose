@@ -18,6 +18,8 @@ import ru.khozyainov.splashun.ui.screens.home.PhotoDetailScreen
 import ru.khozyainov.splashun.ui.screens.login.LoginDestination
 import ru.khozyainov.splashun.ui.screens.login.LoginScreen
 
+private const val DEEP_LINK_URI = "https://unsplash.com/photos"
+
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
@@ -31,6 +33,7 @@ fun SetupNavGraph(
         startDestination = startDestination,
         modifier = modifier
     ) {
+
         composable(route = OnBoardingDestination.route) {
             OnBoardingScreen(
                 modifier = modifier,
@@ -138,7 +141,8 @@ fun NavGraphBuilder.homeGraph(
 
     composable(
         route = PhotoDetailDestination.route,
-        arguments = listOf(navArgument(PhotoDetailDestination.argName) { type = NavType.StringType })
+        arguments = listOf(navArgument(PhotoDetailDestination.argName) { type = NavType.StringType }),
+        deepLinks = listOf(navDeepLink { uriPattern = "$DEEP_LINK_URI/{${PhotoDetailDestination.argName}}" })
     ) { backStackEntry ->
         val photoId = backStackEntry.arguments?.getString(PhotoDetailDestination.argName)
         photoIdForShare(photoId)
@@ -150,4 +154,5 @@ fun NavGraphBuilder.homeGraph(
             userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
         )
     }
+
 }
