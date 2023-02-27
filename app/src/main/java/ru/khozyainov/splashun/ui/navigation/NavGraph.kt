@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.khozyainov.splashun.ui.screens.SplashunApp
 import ru.khozyainov.splashun.ui.screens.SplashunDestination
+import ru.khozyainov.splashun.ui.screens.collections.CollectionsScreen
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingScreen
 import ru.khozyainov.splashun.ui.screens.home.HomeScreen
@@ -101,11 +102,18 @@ fun MainNavGraph(
             connectionState = connectionState
         )
 
-        composable(
-            route = NavItem.Collections.screenRoute
-        ) {
-            //FriendsList(navController)
-        }
+        collectionsGraph(
+            navController = navController,
+            modifier = modifier,
+            expand = expand,
+            displayWidthHeight = displayWidthHeight,
+            scrollToTop = scrollToTop,
+            onScrollToTop = onScrollToTop,
+            photoIdForShare = photoIdForShare,
+            photoDownloaded = photoDownloaded,
+            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded,
+            connectionState = connectionState
+        )
 
         composable(
             route = NavItem.Profile.screenRoute
@@ -157,6 +165,30 @@ fun NavGraphBuilder.homeGraph(
             displayWidthHeight = displayWidthHeight,
             photoDownloaded = photoDownloaded,
             userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
+        )
+    }
+}
+
+fun NavGraphBuilder.collectionsGraph(
+    navController: NavController,
+    expand: Boolean = false,
+    scrollToTop: Boolean = false,
+    onScrollToTop: () -> Unit,
+    modifier: Modifier = Modifier,
+    displayWidthHeight: Pair<Int, Int>,
+    photoIdForShare: (String?) -> Unit,
+    photoDownloaded: (String) -> Unit,
+    userNotifiedThatPhotoDownloaded: Boolean = false,
+    connectionState: ConnectionState
+) {
+    composable(
+        route = NavItem.Collections.screenRoute
+    ) {
+        CollectionsScreen(
+            modifier = modifier,
+            scrollToTop = scrollToTop,
+            onScrollToTop = onScrollToTop,
+            displayWidthHeight = displayWidthHeight
         )
     }
 

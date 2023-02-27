@@ -2,18 +2,18 @@ package ru.khozyainov.splashun.data.network.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.AbbreviatedPhoto.USER
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.BLUR
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.DOWNLOADS
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.EXIF
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.ID
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.IMAGE_HEIGHT
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.IMAGE_URLS
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.IMAGE_WIDTH
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.LIKES
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.LIKE_BY_USER
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.LOCATION
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Photo.TAGS
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.AbbreviatedPhoto.USER
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.BLUR
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.DOWNLOADS
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.EXIF
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.ID
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.IMAGE_HEIGHT
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.IMAGE_URLS
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.IMAGE_WIDTH
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.LIKES
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.LIKE_BY_USER
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.LOCATION
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Photo.TAGS
 
 @JsonClass(generateAdapter = true)
 data class PhotoDetailRemote(

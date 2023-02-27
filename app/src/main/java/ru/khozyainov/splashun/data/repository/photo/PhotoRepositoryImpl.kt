@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.khozyainov.splashun.data.db.dao.PhotoDao
-import ru.khozyainov.splashun.data.network.PhotoRemoteMediator
+import ru.khozyainov.splashun.data.network.remotemediator.PhotoRemoteMediator
 import ru.khozyainov.splashun.data.network.api.PhotoApi
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoParentRemote
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoRemote

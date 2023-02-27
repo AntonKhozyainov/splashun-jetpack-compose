@@ -13,13 +13,11 @@ class PhotoListAdapterJSON {
             PhotoEntity(
                 id = itemPhotoRemote.id,
                 image = itemPhotoRemote.images.imageRaw,
-                placeholder = itemPhotoRemote.blur,
                 like = itemPhotoRemote.likeByUser,
                 likes = itemPhotoRemote.likes,
                 author = itemPhotoRemote.author.name,
                 authorFullName = itemPhotoRemote.author.fullName,
                 authorImage = itemPhotoRemote.author.images.image,
-                authorAbout = itemPhotoRemote.author.about ?: "",
                 search = null,
                 createdAt = System.currentTimeMillis(),
                 width = itemPhotoRemote.width,

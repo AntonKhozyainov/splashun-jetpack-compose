@@ -2,10 +2,10 @@ package ru.khozyainov.splashun.data.db.dao
 
 import androidx.paging.PagingSource
 import androidx.room.*
-import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.CREATED_AT
-import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.ID
-import ru.khozyainov.splashun.data.db.entities.PhotoContract.Columns.SEARCH
-import ru.khozyainov.splashun.data.db.entities.PhotoContract.TABLE_NAME
+import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.CREATED_AT
+import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.ID
+import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.SEARCH
+import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.TABLE_NAME
 import ru.khozyainov.splashun.data.db.entities.PhotoEntity
 
 @Dao

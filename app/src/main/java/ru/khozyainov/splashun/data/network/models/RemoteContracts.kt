@@ -1,6 +1,6 @@
 package ru.khozyainov.splashun.data.network.models
 
-object PhotoRemoteContract {
+object RemoteContracts {
 
     object Search {
         const val RESULTS = "results"
@@ -23,6 +23,15 @@ object PhotoRemoteContract {
         const val LOCATION = "location"
         const val TAGS = "tags"
         const val IMAGE_URLS = "urls"
+    }
+
+    object Collection {
+        const val ID = "id"
+        const val TITLE = "title"
+        const val DESCRIPTION = "description"
+        const val TOTAL_PHOTOS = "total_photos"
+        const val COVER_PHOTO = "cover_photo"
+        const val USER = "user"
     }
 
     object Exif {

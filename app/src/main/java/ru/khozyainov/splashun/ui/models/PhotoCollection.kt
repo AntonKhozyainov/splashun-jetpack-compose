@@ -1,11 +1,11 @@
 package ru.khozyainov.splashun.ui.models
 
-data class Photo(
+data class PhotoCollection(
     val id: String,
     val width: Int,
     val height: Int,
     val image: String,
-    val like: Boolean,
-    val likes: Long,
+    val photosCount: Int,
+    val title: String,
     val author: Author
 )

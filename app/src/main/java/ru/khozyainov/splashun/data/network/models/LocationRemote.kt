@@ -2,9 +2,9 @@ package ru.khozyainov.splashun.data.network.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Location.LOCATION_CITY
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Location.LOCATION_COUNTRY
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Location.LOCATION_POSITION
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Location.LOCATION_CITY
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Location.LOCATION_COUNTRY
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Location.LOCATION_POSITION
 
 @JsonClass(generateAdapter = true)
 data class LocationRemote(

@@ -9,9 +9,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import ru.khozyainov.splashun.data.network.adapters.CollectionsAdapterJSON
 import ru.khozyainov.splashun.data.network.adapters.PhotoDetailAdapterJSON
 import ru.khozyainov.splashun.data.network.adapters.PhotoListAdapterJSON
 import ru.khozyainov.splashun.data.network.adapters.SearchPhotoAdapterJSON
+import ru.khozyainov.splashun.data.network.api.CollectionsApi
 import ru.khozyainov.splashun.data.network.api.PhotoApi
 import ru.khozyainov.splashun.data.network.interceptors.AuthorizationInterceptor
 import javax.inject.Singleton
@@ -43,6 +45,7 @@ object NetworkModule {
                     .add(PhotoListAdapterJSON())
                     .add(SearchPhotoAdapterJSON(PhotoListAdapterJSON()))
                     .add(PhotoDetailAdapterJSON())
+                    .add(CollectionsAdapterJSON())
                     .build()
             )
         )
@@ -53,5 +56,10 @@ object NetworkModule {
     @Provides
     fun providesPhotoApi(retrofit: Retrofit): PhotoApi =
         retrofit.create(PhotoApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providesCollectionsApi(retrofit: Retrofit): CollectionsApi =
+        retrofit.create(CollectionsApi::class.java)
 
 }

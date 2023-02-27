@@ -5,6 +5,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import ru.khozyainov.splashun.data.repository.auth.AuthRepository
+import ru.khozyainov.splashun.data.repository.collections.CollectionsRepository
+import ru.khozyainov.splashun.data.repository.collections.CollectionsRepositoryImpl
 //import ru.khozyainov.splashun.data.repository.auth.AuthRepositoryImpl
 import ru.khozyainov.splashun.data.repository.onboarding.OnBoardingRepository
 import ru.khozyainov.splashun.data.repository.onboarding.OnBoardingRepositoryImpl
@@ -29,4 +31,6 @@ abstract class RepositoriesModule {
     @Binds
     abstract fun provideWorkManagerRepository(workManagerRepositoryImpl: WorkManagerRepositoryImpl): WorkManagerRepository
 
+    @Binds
+    abstract fun provideCollectionsRepository(collectionsRepositoryImpl: CollectionsRepositoryImpl): CollectionsRepository
 }

@@ -2,8 +2,8 @@ package ru.khozyainov.splashun.data.network.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Image.IMAGE_FULL
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Image.IMAGE_RAW
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Image.IMAGE_FULL
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Image.IMAGE_RAW
 
 @JsonClass(generateAdapter = true)
 data class ImagesRemote(

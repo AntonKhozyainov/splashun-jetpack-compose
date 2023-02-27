@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.khozyainov.splashun.data.db.SplashUnDataBase
+import ru.khozyainov.splashun.data.db.dao.CollectionsDao
 import ru.khozyainov.splashun.data.db.dao.PhotoDao
 import javax.inject.Singleton
 
@@ -23,6 +24,8 @@ object DataBaseModule {
     ).build()
 
     @Provides
-    fun providesItemPhotoDAO(db: SplashUnDataBase): PhotoDao = db.photoDao()
+    fun providesPhotoDAO(db: SplashUnDataBase): PhotoDao = db.photoDao()
 
+    @Provides
+    fun providesCollectionsDAO(db: SplashUnDataBase): CollectionsDao = db.collectionsDao()
 }

@@ -1,4 +1,4 @@
-package ru.khozyainov.splashun.data.network
+package ru.khozyainov.splashun.data.network.remotemediator
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -53,20 +53,19 @@ class PhotoRemoteMediator @AssistedInject constructor(
 
     }
 
+    //TODO
     private fun getTestList(): List<PhotoEntity> {
         val list = mutableListOf<PhotoEntity>()
         repeat(1) {
             list.add(
                 PhotoEntity(
                     id = "id_${Random.nextInt()}",
-                    placeholder = "LEHLh[WB2yk8pyoJadR*.7kCMdnj",
                     image = "this.image",
                     like = Random.nextBoolean(),
                     likes = Random.nextInt(0, 10000000).toLong(),
                     author = "@author",
                     authorFullName = "Ivan Petrov",
                     authorImage = "this.authorImage",
-                    authorAbout = "123",
                     search = null,
                     width = 300,
                     height = 450,

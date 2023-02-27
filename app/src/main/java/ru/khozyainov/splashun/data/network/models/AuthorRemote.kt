@@ -2,10 +2,10 @@ package ru.khozyainov.splashun.data.network.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Author.AUTHOR_ABOUT
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Author.AUTHOR_FULL_NAME
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Author.AUTHOR_IMAGES
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Author.AUTHOR_NAME
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Author.AUTHOR_ABOUT
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Author.AUTHOR_FULL_NAME
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Author.AUTHOR_IMAGES
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Author.AUTHOR_NAME
 
 @JsonClass(generateAdapter = true)
 data class AuthorRemote(

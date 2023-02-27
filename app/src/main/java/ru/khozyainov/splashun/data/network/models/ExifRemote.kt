@@ -2,12 +2,12 @@ package ru.khozyainov.splashun.data.network.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Exif.EXIF_APERTURE
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Exif.EXIF_EXPOSURE
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Exif.EXIF_FOCAL
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Exif.EXIF_ISO
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Exif.EXIF_MADE
-import ru.khozyainov.splashun.data.network.models.PhotoRemoteContract.Exif.EXIF_MODEL
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Exif.EXIF_APERTURE
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Exif.EXIF_EXPOSURE
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Exif.EXIF_FOCAL
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Exif.EXIF_ISO
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Exif.EXIF_MADE
+import ru.khozyainov.splashun.data.network.models.RemoteContracts.Exif.EXIF_MODEL
 
 @JsonClass(generateAdapter = true)
 data class ExifRemote(

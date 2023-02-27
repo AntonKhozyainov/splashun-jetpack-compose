@@ -5,6 +5,12 @@ import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 
+enum class ImageLoadState {
+    SUCCESS,
+    LOADING,
+    ERROR
+}
+
 fun forwardingPainter(
     painter: Painter,
     alpha: Float = DefaultAlpha,
