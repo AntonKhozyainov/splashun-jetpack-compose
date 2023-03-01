@@ -17,7 +17,7 @@ sealed class NavItem(
     )
 
     object Collections : NavItem(
-        titleRes = R.string.collection,
+        titleRes = R.string.collections,
         iconRes = R.drawable.ic_bottom_nav_menu_collections,
         screenRoute = "collections"
     )

@@ -1,6 +1,5 @@
 package ru.khozyainov.splashun.ui.screens.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -275,9 +274,7 @@ fun PhotoCard(
                         }
                     )
 
-                    AnimatedVisibility(
-                        visible = imageLoadState.value != ImageLoadState.SUCCESS
-                    ) {
+                    if (imageLoadState.value != ImageLoadState.SUCCESS){
                         Box(
                             modifier = modifier
                                 .fillMaxWidth()
@@ -294,7 +291,6 @@ fun PhotoCard(
                             )
                         }
                     }
-
                 }
 
                 Row(
@@ -358,7 +354,6 @@ fun PhotoCard(
                                 ),
                                 color = Color.White
                             )
-
                         }
                     }
 
@@ -398,13 +393,9 @@ fun PhotoCard(
                                     clip = true
                                 )
                         )
-
                     }
-
                 }
-
             }
-
         }
     }
 }

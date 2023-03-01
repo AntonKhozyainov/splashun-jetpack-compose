@@ -24,6 +24,7 @@ import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.navigation.MainNavGraph
 import ru.khozyainov.splashun.ui.navigation.NavItem
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
+import ru.khozyainov.splashun.ui.screens.collections.CollectionsDestination
 import ru.khozyainov.splashun.ui.screens.home.PhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.home.RibbonDestination
 import ru.khozyainov.splashun.ui.screens.topappbar.SplashunTopAppBar
@@ -460,6 +461,7 @@ private fun getCurrentDestination(
     return when (route) {
         //NavItem.Collections.screenRoute -> route
         PhotoDetailDestination.route -> PhotoDetailDestination
+        CollectionsDestination.route -> CollectionsDestination
         else -> RibbonDestination
     }
 }

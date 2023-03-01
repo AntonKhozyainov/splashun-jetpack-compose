@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.khozyainov.splashun.ui.screens.SplashunApp
 import ru.khozyainov.splashun.ui.screens.SplashunDestination
+import ru.khozyainov.splashun.ui.screens.collections.CollectionDetailDestination
+import ru.khozyainov.splashun.ui.screens.collections.CollectionDetailScreen
 import ru.khozyainov.splashun.ui.screens.collections.CollectionsScreen
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingScreen
@@ -189,6 +191,19 @@ fun NavGraphBuilder.collectionsGraph(
             scrollToTop = scrollToTop,
             onScrollToTop = onScrollToTop,
             displayWidthHeight = displayWidthHeight
+        )
+    }
+
+    composable(
+        route = CollectionDetailDestination.route,
+        arguments = listOf(navArgument(CollectionDetailDestination.argName) { type = NavType.StringType })
+    ) { backStackEntry ->
+        val collectionId = backStackEntry.arguments?.getString(CollectionDetailDestination.argName)
+        CollectionDetailScreen(
+            modifier = modifier,
+//            displayWidthHeight = displayWidthHeight,
+//            photoDownloaded = photoDownloaded,
+//            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
         )
     }
 

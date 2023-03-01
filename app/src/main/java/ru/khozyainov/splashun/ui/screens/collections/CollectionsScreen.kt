@@ -1,6 +1,5 @@
 package ru.khozyainov.splashun.ui.screens.collections
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +17,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultShadowColor
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -39,10 +40,11 @@ import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
 import ru.khozyainov.splashun.utils.ImageLoadState
+import ru.khozyainov.splashun.utils.basicMarquee
 
 object CollectionsDestination : NavigationDestination {
-    override val route: String = "collections_ribbon"
-    override val titleRes: Int = R.string.collection
+    override val route: String = "collections"
+    override val titleRes: Int = R.string.collections
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -99,13 +101,13 @@ fun CollectionsScreen(
 
                     items(
                         items = collectionsList,
-                        key = { collecton ->
-                            collecton.id
+                        key = { collection ->
+                            collection.id
                         }
-                    ) { collecton ->
+                    ) { collection ->
                         CollectionCard(
                             modifier = modifier,
-                            photoCollection = collecton,
+                            photoCollection = collection,
                             displayWidthHeight = displayWidthHeight,
                             onClickCard = { photoCollectionId ->
                                 //navController.navigate("${RibbonDestination.route}/$photoId")
@@ -148,7 +150,7 @@ fun CollectionCard(
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
     onClickCard: (String) -> Unit,
-){
+) {
     val context = LocalContext.current
 
     if (photoCollection == null) {
@@ -163,20 +165,22 @@ fun CollectionCard(
         }
     } else {
         val width = displayWidthHeight.first
-        val height = (photoCollection.height.toDouble() / photoCollection.width.toDouble() * width).toInt()
+        val height =
+            (photoCollection.height.toDouble() / photoCollection.width.toDouble() * width).toInt()
 
         Card(
             modifier = modifier
-                .height(300.dp)
+                .height(200.dp)
                 .fillMaxWidth(),
             onClick = {
                 onClickCard(photoCollection.id)
-            }
+            },
+            shape = RectangleShape
         ) {
             Box(
                 modifier = modifier
                     .fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter
+                contentAlignment = Alignment.Center
             ) {
                 Box(
                     modifier = modifier
@@ -206,9 +210,7 @@ fun CollectionCard(
                         }
                     )
 
-                    AnimatedVisibility(
-                        visible = imageLoadState.value != ImageLoadState.SUCCESS
-                    ) {
+                    if (imageLoadState.value != ImageLoadState.SUCCESS) {
                         Box(
                             modifier = modifier
                                 .fillMaxWidth()
@@ -227,72 +229,114 @@ fun CollectionCard(
                     }
                 }
 
-                //TODO сделать норм разметку
-                Row(
+                Column(
                     modifier = modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        modifier = modifier,
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                     ) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(context = context)
-                                .data(photoCollection.author.image)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = stringResource(id = R.string.author_image),
-                            contentScale = ContentScale.FillBounds,
-                            placeholder = painterResource(id = R.drawable.ic_photo_placeholder),
-                            error = painterResource(id = R.drawable.ic_loading_error),
-                            modifier = modifier
-                                .size(27.dp)
-                                .clip(CircleShape)
-                                .shadow(
-                                    elevation = 2.dp,
-                                    shape = CircleShape,
-                                    clip = true
+                        Text(
+                            text = if (photoCollection.photosCount == 1) stringResource(id = R.string.collection_one_photo)
+                                    else stringResource(id = R.string.collection_photo_count, photoCollection.photosCount.toString()),
+                            style = MaterialTheme.typography.h2.copy(
+                                shadow = Shadow(
+                                    color = DefaultShadowColor,
+                                    offset = Offset(2f, 2f),
+                                    blurRadius = 2f
                                 )
+                            ),
+                            color = Color.White,
+
                         )
 
-                        Spacer(modifier = modifier.padding(2.dp))
-
-                        Column(
-                            modifier = modifier,
-                            verticalArrangement = Arrangement.SpaceEvenly
-                        ) {
-
-                            Text(
-                                text = photoCollection.author.fullName,
-                                style = MaterialTheme.typography.body1.copy(
-                                    shadow = Shadow(
-                                        color = DefaultShadowColor,
-                                        offset = Offset(2f, 2f),
-                                        blurRadius = 2f
-                                    )
-                                ),
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Text(
-                                text = photoCollection.author.name,
-                                style = MaterialTheme.typography.body2.copy(
-                                    shadow = Shadow(
-                                        color = DefaultShadowColor,
-                                        offset = Offset(2f, 2f),
-                                        blurRadius = 2f
-                                    )
-                                ),
-                                color = Color.White
-                            )
-
-                        }
+                        Text(
+                            modifier = modifier
+                                .basicMarquee(),
+                            text = photoCollection.title,
+                            style = MaterialTheme.typography.h1.copy(
+                                shadow = Shadow(
+                                    color = DefaultShadowColor,
+                                    offset = Offset(2f, 2f),
+                                    blurRadius = 2f
+                                )
+                            ),
+                            fontSize = 56.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1
+                        )
                     }
 
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            modifier = modifier,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            AsyncImage(
+                                model = ImageRequest.Builder(context = context)
+                                    .data(photoCollection.author.image)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = stringResource(id = R.string.author_image),
+                                contentScale = ContentScale.FillBounds,
+                                placeholder = painterResource(id = R.drawable.ic_photo_placeholder),
+                                error = painterResource(id = R.drawable.ic_loading_error),
+                                modifier = modifier
+                                    .size(27.dp)
+                                    .clip(CircleShape)
+                                    .shadow(
+                                        elevation = 2.dp,
+                                        shape = CircleShape,
+                                        clip = true
+                                    )
+                            )
+
+                            Spacer(modifier = modifier.padding(2.dp))
+
+                            Column(
+                                modifier = modifier,
+                                verticalArrangement = Arrangement.SpaceEvenly
+                            ) {
+
+                                Text(
+                                    text = photoCollection.author.fullName,
+                                    style = MaterialTheme.typography.body1.copy(
+                                        shadow = Shadow(
+                                            color = DefaultShadowColor,
+                                            offset = Offset(2f, 2f),
+                                            blurRadius = 2f
+                                        )
+                                    ),
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
+
+                                Text(
+                                    text = photoCollection.author.name,
+                                    style = MaterialTheme.typography.body2.copy(
+                                        shadow = Shadow(
+                                            color = DefaultShadowColor,
+                                            offset = Offset(2f, 2f),
+                                            blurRadius = 2f
+                                        )
+                                    ),
+                                    color = Color.White
+                                )
+
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -13,6 +13,7 @@ class CollectionsAdapterJSON {
             CollectionEntity(
                 id = itemCollectionRemote.id,
                 title = itemCollectionRemote.title,
+                description = itemCollectionRemote.description ?: "",
                 photosCount = itemCollectionRemote.totalPhotos,
                 author = itemCollectionRemote.author.name,
                 authorFullName = itemCollectionRemote.author.fullName,

@@ -13,7 +13,7 @@ import ru.khozyainov.splashun.data.network.models.RemoteContracts.Collection.USE
 data class CollectionRemote(
     @Json(name = ID) val id: String,
     @Json(name = TITLE) val title: String,
-    @Json(name = DESCRIPTION) val description: String,
+    @Json(name = DESCRIPTION) val description: String?,
     @Json(name = TOTAL_PHOTOS) val totalPhotos: Int,
     @Json(name = COVER_PHOTO) val coverPhoto: PhotoRemote,
     @Json(name = USER) val author: AuthorRemote,

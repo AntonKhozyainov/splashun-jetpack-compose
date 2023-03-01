@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.AUTHOR
 import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.AUTHOR_AVATAR
 import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.AUTHOR_FULL_NAME
+import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.COLLECTION_ID
 import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.CREATED_AT
 import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.HEIGHT
 import ru.khozyainov.splashun.data.db.entities.PhotoEntityContract.Columns.ID
@@ -28,6 +29,7 @@ import ru.khozyainov.splashun.ui.models.Photo
 data class PhotoEntity(
     @PrimaryKey
     @ColumnInfo(name = ID) val id: String,
+    @ColumnInfo(name = COLLECTION_ID) val collectionId: String? = null,
     @ColumnInfo(name = PHOTO_RAW) val image: String,
     @ColumnInfo(name = LIKE) val like: Boolean,
     @ColumnInfo(name = LIKES) val likes: Long,

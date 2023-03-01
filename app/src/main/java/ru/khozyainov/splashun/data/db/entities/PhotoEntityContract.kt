@@ -6,6 +6,7 @@ object PhotoEntityContract {
 
     object Columns {
         const val ID = "id"
+        const val COLLECTION_ID = "collection_id"
         const val PHOTO_RAW = "photo_raw"
         const val LIKE = "photo_like"
         const val LIKES = "likes"

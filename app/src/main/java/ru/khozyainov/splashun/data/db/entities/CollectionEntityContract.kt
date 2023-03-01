@@ -7,6 +7,7 @@ object CollectionEntityContract {
     object Columns {
         const val ID = "id"
         const val TITLE = "title"
+        const val DESCRIPTION = "description"
         const val CREATED_AT = "created_at"
         const val PHOTOS_COUNT = "photos_count"
         const val COVER_PHOTO = "cover_photo"

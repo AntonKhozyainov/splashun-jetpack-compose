@@ -11,6 +11,7 @@ import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.
 import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.COVER_PHOTO_HEIGHT
 import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.COVER_PHOTO_WIDTH
 import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.CREATED_AT
+import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.DESCRIPTION
 import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.ID
 import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.PHOTOS_COUNT
 import ru.khozyainov.splashun.data.db.entities.CollectionEntityContract.Columns.TITLE
@@ -28,6 +29,7 @@ data class CollectionEntity(
     @PrimaryKey
     @ColumnInfo(name = ID) val id: String,
     @ColumnInfo(name = TITLE) val title: String,
+    @ColumnInfo(name = DESCRIPTION) val description: String,
     @ColumnInfo(name = CREATED_AT) val createdAt: Long,
     @ColumnInfo(name = PHOTOS_COUNT) val photosCount: Int,
     @ColumnInfo(name = COVER_PHOTO) val coverPhoto: String,
@@ -45,6 +47,7 @@ data class CollectionEntity(
             image = this.coverPhoto,
             photosCount = this.photosCount,
             title = this.title,
+            description = this.description,
             author = Author(
                 name = "@${this.author}",
                 fullName = this.authorFullName,

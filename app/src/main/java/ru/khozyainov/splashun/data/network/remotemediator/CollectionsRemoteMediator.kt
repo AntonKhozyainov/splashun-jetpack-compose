@@ -36,16 +36,16 @@ class CollectionsRemoteMediator @Inject constructor(
 
         return try {
             //todo
-            val listItemPhoto = collectionsAPI.getCollections(pageIndex, state.config.pageSize)
-            //val listItemPhoto = getTestList()
+            val collections = collectionsAPI.getCollections(pageIndex, state.config.pageSize)
+            //val collections = getTestList()
 
             if (loadType == LoadType.REFRESH) {
-                collectionsDao.refresh(listItemPhoto)
+                collectionsDao.refresh(collections)
             } else {
-                collectionsDao.save(listItemPhoto)
+                collectionsDao.save(collections)
             }
             MediatorResult.Success(
-                endOfPaginationReached = listItemPhoto.size < state.config.pageSize
+                endOfPaginationReached = collections.size < state.config.pageSize
             )
 
         } catch (e: Exception) {
@@ -59,6 +59,7 @@ class CollectionsRemoteMediator @Inject constructor(
             list.add(
                 CollectionEntity(
                     id = "id_${Random.nextInt()}",
+                    description = "some description",
                     title = "Collection title",
                     photosCount = Random.nextInt(1,200),
                     coverPhoto = "",

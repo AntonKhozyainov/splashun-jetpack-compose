@@ -16,7 +16,7 @@
 
     <string name="ribbon">Ribbon</string>
     <string name="photo">Photo</string>
-    <string name="collection">Collection</string>
+    <string name="collections">Collections</string>
 
     <string name="back_button">Back</string>
 
@@ -57,5 +57,7 @@
     <string name="download">Download</string>
     <string name="notification_downloading">The photo is downloading…</string>
 
+    <string name="collection_photo_count">%1$s photos</string>
+    <string name="collection_one_photo">1 photo</string>
 
 </resources>
