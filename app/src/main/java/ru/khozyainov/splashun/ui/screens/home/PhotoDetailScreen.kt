@@ -38,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter.State.Empty.painter
 import ru.khozyainov.splashun.utils.BlurHashDecoder
 import ru.khozyainov.splashun.utils.forwardingPainter
@@ -51,7 +52,6 @@ object PhotoDetailDestination : NavigationDestination {
 
 @Composable
 fun PhotoDetailScreen(
-    photoId: String?,
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
     photoDetailViewModel: PhotoDetailViewModel = hiltViewModel(),
@@ -59,8 +59,7 @@ fun PhotoDetailScreen(
     userNotifiedThatPhotoDownloaded: Boolean = false
 ) {
 
-    photoDetailViewModel.getPhotoById(photoId)
-    val uiState by photoDetailViewModel.uiPhotoDetailState.collectAsState()
+    val uiState by photoDetailViewModel.uiPhotoDetailState.collectAsStateWithLifecycle()
 
     if (userNotifiedThatPhotoDownloaded) {
         photoDetailViewModel.cancelWork()

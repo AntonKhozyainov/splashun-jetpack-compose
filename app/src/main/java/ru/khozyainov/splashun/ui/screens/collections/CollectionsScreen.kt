@@ -27,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -39,6 +41,7 @@ import ru.khozyainov.splashun.ui.models.PhotoCollection
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
+import ru.khozyainov.splashun.ui.screens.SplashUnImage
 import ru.khozyainov.splashun.utils.ImageLoadState
 import ru.khozyainov.splashun.utils.basicMarquee
 
@@ -50,6 +53,7 @@ object CollectionsDestination : NavigationDestination {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CollectionsScreen(
+    navController: NavController,
     modifier: Modifier = Modifier,
     onScrollToTop: () -> Unit,
     scrollToTop: Boolean = false,
@@ -57,7 +61,7 @@ fun CollectionsScreen(
 ) {
     val collectionsViewModel: CollectionsViewModel = hiltViewModel()
 
-    val uiState by collectionsViewModel.uiCollectionsState.collectAsState()
+    val uiState by collectionsViewModel.uiCollectionsState.collectAsStateWithLifecycle()
     val collectionsList = uiState.pagingCollectionsFlow.collectAsLazyPagingItems()
 
     val coroutineScope = rememberCoroutineScope()
@@ -110,7 +114,7 @@ fun CollectionsScreen(
                             photoCollection = collection,
                             displayWidthHeight = displayWidthHeight,
                             onClickCard = { photoCollectionId ->
-                                //navController.navigate("${RibbonDestination.route}/$photoId")
+                                navController.navigate("${CollectionsDestination.route}/$photoCollectionId")
                             }
                         )
                     }
@@ -156,10 +160,8 @@ fun CollectionCard(
     if (photoCollection == null) {
         Card(
             modifier = modifier
-                .padding(4.dp)
+                .height(200.dp)
                 .fillMaxWidth()
-                .fillMaxHeight(fraction = 0.4f),
-            elevation = 2.dp,
         ) {
             LoadingScreen()
         }
@@ -188,45 +190,14 @@ fun CollectionCard(
                     contentAlignment = Alignment.Center
                 ) {
 
-                    val imageLoadState = remember {
-                        mutableStateOf(ImageLoadState.LOADING)
-                    }
-
-                    AsyncImage(
-                        model = ImageRequest.Builder(context = context)
-                            .data(photoCollection.image + "&fm=pjpg&w=$width&h=$height&fit=clamp")
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = stringResource(id = R.string.photo),
-                        contentScale = ContentScale.Crop,
-                        onLoading = {
-                            imageLoadState.value = ImageLoadState.LOADING
-                        },
-                        onSuccess = {
-                            imageLoadState.value = ImageLoadState.SUCCESS
-                        },
-                        onError = {
-                            imageLoadState.value = ImageLoadState.ERROR
-                        }
+                    SplashUnImage(
+                        modifier = modifier,
+                        image = photoCollection.image,
+                        height = height,
+                        width = width,
+                        context = context,
+                        contentScale = ContentScale.Crop
                     )
-
-                    if (imageLoadState.value != ImageLoadState.SUCCESS) {
-                        Box(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .height(300.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = if (imageLoadState.value == ImageLoadState.LOADING) {
-                                    painterResource(id = R.drawable.ic_photo_placeholder)
-                                } else {
-                                    painterResource(id = R.drawable.ic_loading_error)
-                                },
-                                contentDescription = null
-                            )
-                        }
-                    }
                 }
 
                 Column(

@@ -17,6 +17,13 @@ interface PhotoApi {
         @Query("per_page") limit: Int
     ): List<PhotoEntity>
 
+    @GET("/collections/{id}/photos")
+    suspend fun getPhotosOfCollection(
+        @Path("id") id: String,
+        @Query("page") page: Int,
+        @Query("per_page") limit: Int
+    ): List<PhotoEntity>
+
     @GET("/photos/{id}")
     suspend fun getPhotoByID(
         @Path("id") id: String

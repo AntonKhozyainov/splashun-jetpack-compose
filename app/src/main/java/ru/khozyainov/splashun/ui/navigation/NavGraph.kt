@@ -162,7 +162,6 @@ fun NavGraphBuilder.homeGraph(
         val photoId = backStackEntry.arguments?.getString(PhotoDetailDestination.argName)
         photoIdForShare(photoId)
         PhotoDetailScreen(
-            photoId = photoId,
             modifier = modifier,
             displayWidthHeight = displayWidthHeight,
             photoDownloaded = photoDownloaded,
@@ -187,6 +186,7 @@ fun NavGraphBuilder.collectionsGraph(
         route = NavItem.Collections.screenRoute
     ) {
         CollectionsScreen(
+            navController = navController,
             modifier = modifier,
             scrollToTop = scrollToTop,
             onScrollToTop = onScrollToTop,
@@ -201,6 +201,7 @@ fun NavGraphBuilder.collectionsGraph(
         val collectionId = backStackEntry.arguments?.getString(CollectionDetailDestination.argName)
         CollectionDetailScreen(
             modifier = modifier,
+            displayWidthHeight = displayWidthHeight
 //            displayWidthHeight = displayWidthHeight,
 //            photoDownloaded = photoDownloaded,
 //            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded

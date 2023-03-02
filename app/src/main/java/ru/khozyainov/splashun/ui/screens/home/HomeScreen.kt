@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -39,6 +40,7 @@ import ru.khozyainov.splashun.ui.models.Photo
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
+import ru.khozyainov.splashun.ui.screens.SplashUnImage
 import ru.khozyainov.splashun.utils.ConnectionState
 import ru.khozyainov.splashun.utils.ImageLoadState
 import ru.khozyainov.splashun.utils.getLikeCountString
@@ -63,7 +65,8 @@ fun HomeScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
 
     homeViewModel.setSearchBy(searchText)
-    val uiState by homeViewModel.uiHomeState.collectAsState()
+
+    val uiState by homeViewModel.uiHomeState.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -251,46 +254,14 @@ fun PhotoCard(
                         .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-
-                    val imageLoadState = remember {
-                        mutableStateOf(ImageLoadState.LOADING)
-                    }
-
-                    AsyncImage(
-                        model = ImageRequest.Builder(context = context)
-                            .data(photo.image + "&fm=pjpg&w=$width&h=$height&fit=clamp")
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = stringResource(id = R.string.photo),
-                        contentScale = ContentScale.FillBounds,
-                        onLoading = {
-                            imageLoadState.value = ImageLoadState.LOADING
-                        },
-                        onSuccess = {
-                            imageLoadState.value = ImageLoadState.SUCCESS
-                        },
-                        onError = {
-                            imageLoadState.value = ImageLoadState.ERROR
-                        }
+                    SplashUnImage(
+                        modifier = modifier,
+                        image = photo.image,
+                        height = height,
+                        width = width,
+                        context = context,
+                        contentScale = ContentScale.FillBounds
                     )
-
-                    if (imageLoadState.value != ImageLoadState.SUCCESS){
-                        Box(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = if (imageLoadState.value == ImageLoadState.LOADING) {
-                                    painterResource(id = R.drawable.ic_photo_placeholder)
-                                } else {
-                                    painterResource(id = R.drawable.ic_loading_error)
-                                },
-                                contentDescription = null
-                            )
-                        }
-                    }
                 }
 
                 Row(

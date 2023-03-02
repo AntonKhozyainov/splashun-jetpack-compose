@@ -42,7 +42,7 @@ fun LoginScreen(
     expand: Boolean = false
 ) {
 
-    val uiState = loginViewModel.uiState.collectAsState()
+    val uiState by loginViewModel.uiState.collectAsState()
 
     val isLaunch = remember {
         mutableStateOf(false)
@@ -54,7 +54,7 @@ fun LoginScreen(
             handleAuthResponseIntent(dataIntent, loginViewModel)
         }
 
-    val intentFlow = uiState.value.openAuthPageIntent?.collectAsState(initial = null)
+    val intentFlow = uiState.openAuthPageIntent?.collectAsState(initial = null)
 
     if (!isLaunch.value) {
         intentFlow?.value?.let { intent ->
@@ -63,19 +63,19 @@ fun LoginScreen(
         }
     }
 
-    if (uiState.value.loginIsDone) {
+    if (uiState.loginIsDone) {
         navController.popBackStack()
         navController.navigate(SplashunDestination.route)
     }
 
-    if (uiState.value.errorMessage.isNotBlank()) {
+    if (uiState.errorMessage.isNotBlank()) {
         ExceptionScreen(
-            exceptionMessage = uiState.value.errorMessage
+            exceptionMessage = uiState.errorMessage
         ) {
             loginViewModel.refreshState()
         }
     } else {
-        if (uiState.value.loading) {
+        if (uiState.loading) {
             LoadingScreen()
         } else {
             LoginContentScreen(

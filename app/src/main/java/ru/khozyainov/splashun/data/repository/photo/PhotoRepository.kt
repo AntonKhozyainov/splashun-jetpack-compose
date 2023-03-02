@@ -10,6 +10,8 @@ interface PhotoRepository {
 
     fun getPhotos(query: String): Flow<PagingData<Photo>>
 
+    fun getPhotosByCollectionId(id: String): Flow<PagingData<Photo>>
+
     fun setLike(
         photoId: String,
         onCompleteCallback: (abbreviatedPhotoRemote: AbbreviatedPhotoRemote) -> Unit,

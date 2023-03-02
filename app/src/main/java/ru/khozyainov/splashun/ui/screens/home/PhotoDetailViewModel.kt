@@ -1,12 +1,14 @@
 package ru.khozyainov.splashun.ui.screens.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoRemote
@@ -17,35 +19,34 @@ import ru.khozyainov.splashun.workers.DownloadWorker.Companion.TAG_OUTPUT_FAILUR
 import ru.khozyainov.splashun.workers.DownloadWorker.Companion.TAG_OUTPUT_SUCCESS
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PhotoDetailViewModel @Inject constructor(
     private val photoRepository: PhotoRepository,
     private val workManagerRepository: WorkManagerRepository,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    saveStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiPhotoDetailState = MutableStateFlow(PhotoDetailScreenState())
     val uiPhotoDetailState: StateFlow<PhotoDetailScreenState> = _uiPhotoDetailState.asStateFlow()
 
-    private val photoId = MutableStateFlow(String())
+    private var currentJob: Job? = null
+
+    private val photoId: String
 
     private val errorHandler = CoroutineExceptionHandler { _, throwable ->
         setErrorState(throwable)
     }
 
     init {
+        photoId = saveStateHandle[PhotoDetailDestination.argName] ?: throw Exception("Incorrect argument = ${PhotoDetailDestination.argName}")
         refreshState()
     }
 
     fun refreshState() {
-
-        val photoDetailFlow = photoId.flatMapLatest { photoId ->
+        currentJob = viewModelScope.launch(errorHandler) {
             photoRepository.getPhotoById(photoId)
-        }
-
-        viewModelScope.launch(errorHandler) {
-            photoDetailFlow.collect { photoDetail ->
+                .collect { photoDetail ->
                 _uiPhotoDetailState.value = _uiPhotoDetailState.value.copy(
                     photoDetail = photoDetail,
                     photoIsDownloading = false,
@@ -55,11 +56,6 @@ class PhotoDetailViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    fun getPhotoById(photoId: String?, refresh: Boolean = false) {
-        if ((this.photoId.value == photoId || photoId == null) && !refresh) return
-        this.photoId.value = photoId!!
     }
 
     private fun setErrorState(throwable: Throwable) {
@@ -81,7 +77,7 @@ class PhotoDetailViewModel @Inject constructor(
     fun setLike() {
         if (!_uiPhotoDetailState.value.like) {
             photoRepository.setLike(
-                photoId = photoId.value,
+                photoId = photoId,
                 onCompleteCallback = { abbreviatedPhotoRemote ->
                     updateLikeState(abbreviatedPhotoRemote)
                 },
@@ -91,7 +87,7 @@ class PhotoDetailViewModel @Inject constructor(
             )
         } else {
             photoRepository.deleteLike(
-                photoId = photoId.value,
+                photoId = photoId,
                 onCompleteCallback = { abbreviatedPhotoRemote ->
                     updateLikeState(abbreviatedPhotoRemote)
                 },
@@ -145,6 +141,10 @@ class PhotoDetailViewModel @Inject constructor(
         )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        currentJob?.cancel()
+    }
 
     data class PhotoDetailScreenState(
         val photoDetail: PhotoDetail? = null,

@@ -14,6 +14,7 @@ import ru.khozyainov.splashun.data.network.remotemediator.PhotoRemoteMediator
 import ru.khozyainov.splashun.data.network.api.PhotoApi
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoParentRemote
 import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoRemote
+import ru.khozyainov.splashun.data.network.remotemediator.PhotosCollectionRemoteMediator
 import ru.khozyainov.splashun.ui.models.Photo
 import ru.khozyainov.splashun.ui.models.PhotoDetail
 import javax.inject.Inject
@@ -22,8 +23,9 @@ import javax.inject.Inject
 class PhotoRepositoryImpl @Inject constructor(
     private val photoDao: PhotoDao,
     private val photoAPI: PhotoApi,
-    private val remoteMediatorFactory: PhotoRemoteMediator.Factory
-): PhotoRepository {
+    private val photoRemoteMediatorFactory: PhotoRemoteMediator.Factory,
+    private val photosCollectionRemoteMediatorFactory: PhotosCollectionRemoteMediator.Factory
+) : PhotoRepository {
 
     override fun getPhotos(query: String): Flow<PagingData<Photo>> =
         Pager(
@@ -32,8 +34,31 @@ class PhotoRepositoryImpl @Inject constructor(
                 initialLoadSize = PAGE_SIZE
 
             ),
-            remoteMediator = remoteMediatorFactory.create(query),
-            pagingSourceFactory = { photoDao.getPagingSource(query = if (query == "") null else query) }
+            remoteMediator = photoRemoteMediatorFactory.create(query),
+            pagingSourceFactory = {
+                photoDao.getPagingSource(
+                    query = if (query == "") null else query,
+                    collectionId = null
+                )
+            }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { photoEntity ->
+                    photoEntity.toPhoto()
+                }
+            }
+
+    override fun getPhotosByCollectionId(id: String): Flow<PagingData<Photo>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                initialLoadSize = PAGE_SIZE
+
+            ),
+            remoteMediator = photosCollectionRemoteMediatorFactory.create(id),
+            pagingSourceFactory = {
+                photoDao.getPagingSource(query = null, collectionId = id)
+            }
         ).flow
             .map { pagingData ->
                 pagingData.map { photoEntity ->
@@ -42,8 +67,10 @@ class PhotoRepositoryImpl @Inject constructor(
             }
 
     override fun getPhotoById(id: String): Flow<PhotoDetail> = flow {
+        withContext(Dispatchers.IO){
             emit(photoAPI.getPhotoByID(id))
         }
+    }
 
 
     override suspend fun setRefreshPhotoToDataBase(abbreviatedPhotoRemote: AbbreviatedPhotoRemote) =

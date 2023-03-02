@@ -40,6 +40,7 @@ class HomeViewModel @Inject constructor(
             .flatMapLatest { searchString ->
                 photoRepository.getPhotos(searchString)
             }
+            .flowOn(Dispatchers.IO)
             .cachedIn(viewModelScope)
 
         _uiHomeState.value = _uiHomeState.value.copy(

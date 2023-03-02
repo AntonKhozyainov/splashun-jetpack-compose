@@ -10,7 +10,6 @@ import ru.khozyainov.splashun.data.repository.collections.CollectionsRepository
 import ru.khozyainov.splashun.ui.models.PhotoCollection
 import javax.inject.Inject
 
-@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class CollectionsViewModel @Inject constructor(
     private val collectionsRepository: CollectionsRepository

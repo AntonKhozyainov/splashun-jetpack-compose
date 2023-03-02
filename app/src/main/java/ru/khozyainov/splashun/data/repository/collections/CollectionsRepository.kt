@@ -6,4 +6,5 @@ import ru.khozyainov.splashun.ui.models.PhotoCollection
 
 interface CollectionsRepository {
     fun getCollections(): Flow<PagingData<PhotoCollection>>
+    fun getCollectionById(id: String): Flow<PhotoCollection>
 }

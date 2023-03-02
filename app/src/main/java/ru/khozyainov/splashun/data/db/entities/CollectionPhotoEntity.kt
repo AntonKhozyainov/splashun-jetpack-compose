@@ -1,18 +1,6 @@
 package ru.khozyainov.splashun.data.db.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.COLLECTION_ID
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.CREATED_AT
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.HEIGHT
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.ID
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.LIKE
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.LIKES
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.PHOTO_RAW
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.Columns.WIDTH
-import ru.khozyainov.splashun.data.db.entities.CollectionPhotoEntityContract.TABLE_NAME
+
 
 //@Entity(
 //    tableName = TABLE_NAME,
