@@ -37,7 +37,8 @@ fun SplashunTopAppBar(
     modifier: Modifier = Modifier,
     onPressSearch: (String) -> Unit,
     viewModel: TopAppBarViewModel = hiltViewModel(),
-    photoIdForShare: String? = null
+    photoIdForShare: String? = null,
+    appBarTitle: String
 ) {
 
     val context = LocalContext.current
@@ -54,7 +55,8 @@ fun SplashunTopAppBar(
             searchTextState = searchTextState,
             viewModel = viewModel,
             onPressSearch = onPressSearch,
-            photoIdForShare = photoIdForShare
+            photoIdForShare = photoIdForShare,
+            appBarTitle = appBarTitle
         )
     } else {
         TopAppBarWithoutNavIcon(
@@ -65,7 +67,8 @@ fun SplashunTopAppBar(
             searchTextState = searchTextState,
             viewModel = viewModel,
             onPressSearch = onPressSearch,
-            photoIdForShare = photoIdForShare
+            photoIdForShare = photoIdForShare,
+            appBarTitle = appBarTitle
         )
     }
 }
@@ -79,13 +82,14 @@ fun TopAppBarWithoutNavIcon(
     searchTextState: State<String>,
     viewModel: TopAppBarViewModel,
     onPressSearch: (String) -> Unit,
-    photoIdForShare: String? = null
+    photoIdForShare: String? = null,
+    appBarTitle: String
 ) {
 
     TopAppBar(
         title = {
             Text(
-                stringResource(id = navigationDestination.titleRes),
+                text = appBarTitle,//stringResource(id = navigationDestination.titleRes),
                 style = MaterialTheme.typography.h1,
                 color = Color.Black
             )
@@ -133,12 +137,13 @@ fun TopAppBarWithNavIcon(
     onPressSearch: (String) -> Unit,
     navigateUp: () -> Unit,
     photoIdForShare: String? = null,
+    appBarTitle: String
 ) {
 
     TopAppBar(
         title = {
             Text(
-                stringResource(id = navigationDestination.titleRes),
+                text = appBarTitle,//stringResource(id = navigationDestination.titleRes),
                 style = MaterialTheme.typography.h1,
                 color = Color.Black
             )

@@ -17,17 +17,22 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.khozyainov.splashun.R
+import ru.khozyainov.splashun.ui.models.ImageWithSize
 import ru.khozyainov.splashun.utils.ImageLoadState
 
 @Composable
 fun SplashUnImage(
-    image: String,
-    width: Int,
-    height: Int,
+    imageWithSize: ImageWithSize,
+    displayWidthHeight: Pair<Int, Int>,
     context: Context,
     modifier: Modifier = Modifier,
     contentScale: ContentScale,
+    boxHeight: Int,
 ) {
+
+    val width = displayWidthHeight.first
+    val height = (imageWithSize.height.toDouble() / imageWithSize.width.toDouble() * width).toInt()
+
     val imageLoadState = remember {
         mutableStateOf(ImageLoadState.LOADING)
     }
@@ -35,7 +40,7 @@ fun SplashUnImage(
     AsyncImage(
         model = ImageRequest.Builder(context = context)
             .data(buildString {
-                append(image)
+                append(imageWithSize.image)
                 append("&fm=pjpg&w=$width&h=$height&fit=clamp")
             })
             .crossfade(true)
@@ -57,7 +62,7 @@ fun SplashUnImage(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .height(300.dp),
+                .height(boxHeight.dp),
             contentAlignment = Alignment.Center
         ) {
             Image(

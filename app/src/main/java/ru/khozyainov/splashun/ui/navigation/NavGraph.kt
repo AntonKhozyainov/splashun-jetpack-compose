@@ -77,7 +77,8 @@ fun MainNavGraph(
     photoIdForShare: (String?) -> Unit,
     photoDownloaded: (String) -> Unit,
     userNotifiedThatPhotoDownloaded: Boolean = false,
-    connectionState: ConnectionState
+    connectionState: ConnectionState,
+    onClickCollection: (collectionTitle: String) -> Unit
 ) {
 
     //TODO remember?
@@ -111,10 +112,11 @@ fun MainNavGraph(
             displayWidthHeight = displayWidthHeight,
             scrollToTop = scrollToTop,
             onScrollToTop = onScrollToTop,
-            photoIdForShare = photoIdForShare,
-            photoDownloaded = photoDownloaded,
-            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded,
-            connectionState = connectionState
+//            photoIdForShare = photoIdForShare,
+//            photoDownloaded = photoDownloaded,
+//            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded,
+            connectionState = connectionState,
+            onClickCollection = onClickCollection
         )
 
         composable(
@@ -177,9 +179,10 @@ fun NavGraphBuilder.collectionsGraph(
     onScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
-    photoIdForShare: (String?) -> Unit,
-    photoDownloaded: (String) -> Unit,
-    userNotifiedThatPhotoDownloaded: Boolean = false,
+    onClickCollection: (collectionTitle: String) -> Unit,
+//    photoIdForShare: (String?) -> Unit,
+//    photoDownloaded: (String) -> Unit,
+//    userNotifiedThatPhotoDownloaded: Boolean = false,
     connectionState: ConnectionState
 ) {
     composable(
@@ -190,22 +193,20 @@ fun NavGraphBuilder.collectionsGraph(
             modifier = modifier,
             scrollToTop = scrollToTop,
             onScrollToTop = onScrollToTop,
-            displayWidthHeight = displayWidthHeight
+            displayWidthHeight = displayWidthHeight,
+            onClickCollection = onClickCollection
         )
     }
 
     composable(
         route = CollectionDetailDestination.route,
         arguments = listOf(navArgument(CollectionDetailDestination.argName) { type = NavType.StringType })
-    ) { backStackEntry ->
-        val collectionId = backStackEntry.arguments?.getString(CollectionDetailDestination.argName)
+    ) {
         CollectionDetailScreen(
             modifier = modifier,
-            displayWidthHeight = displayWidthHeight
-//            displayWidthHeight = displayWidthHeight,
-//            photoDownloaded = photoDownloaded,
-//            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
+            displayWidthHeight = displayWidthHeight,
+            connectionState = connectionState,
+            navController = navController
         )
     }
-
 }

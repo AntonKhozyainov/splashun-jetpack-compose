@@ -17,6 +17,7 @@
     <string name="ribbon">Ribbon</string>
     <string name="photo">Photo</string>
     <string name="collections">Collections</string>
+    <string name="collection_details">Collection details</string>
 
     <string name="back_button">Back</string>
 
@@ -59,5 +60,8 @@
 
     <string name="collection_photo_count">%1$s photos</string>
     <string name="collection_one_photo">1 photo</string>
+
+    <string name="collection_image_count">%1$s images by @%2$s</string>
+    <string name="collection_one_image">1 image by @%1$s</string>
 
 </resources>

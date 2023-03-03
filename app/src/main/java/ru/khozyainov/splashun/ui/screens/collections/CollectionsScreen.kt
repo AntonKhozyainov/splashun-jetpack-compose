@@ -58,6 +58,7 @@ fun CollectionsScreen(
     onScrollToTop: () -> Unit,
     scrollToTop: Boolean = false,
     displayWidthHeight: Pair<Int, Int>,
+    onClickCollection: (collectionTitle: String) -> Unit
 ) {
     val collectionsViewModel: CollectionsViewModel = hiltViewModel()
 
@@ -114,6 +115,7 @@ fun CollectionsScreen(
                             photoCollection = collection,
                             displayWidthHeight = displayWidthHeight,
                             onClickCard = { photoCollectionId ->
+                                onClickCollection(collection?.title ?: photoCollectionId)
                                 navController.navigate("${CollectionsDestination.route}/$photoCollectionId")
                             }
                         )
@@ -156,23 +158,20 @@ fun CollectionCard(
     onClickCard: (String) -> Unit,
 ) {
     val context = LocalContext.current
-
+    val boxHeight = 200
     if (photoCollection == null) {
         Card(
             modifier = modifier
-                .height(200.dp)
+                .height(boxHeight.dp)
                 .fillMaxWidth()
         ) {
             LoadingScreen()
         }
     } else {
-        val width = displayWidthHeight.first
-        val height =
-            (photoCollection.height.toDouble() / photoCollection.width.toDouble() * width).toInt()
 
         Card(
             modifier = modifier
-                .height(200.dp)
+                .height(boxHeight.dp)
                 .fillMaxWidth(),
             onClick = {
                 onClickCard(photoCollection.id)
@@ -192,11 +191,11 @@ fun CollectionCard(
 
                     SplashUnImage(
                         modifier = modifier,
-                        image = photoCollection.image,
-                        height = height,
-                        width = width,
+                        imageWithSize = photoCollection,
+                        displayWidthHeight = displayWidthHeight,
                         context = context,
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+                        boxHeight = boxHeight
                     )
                 }
 

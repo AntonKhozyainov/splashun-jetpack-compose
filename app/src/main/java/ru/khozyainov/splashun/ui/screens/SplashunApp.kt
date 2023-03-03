@@ -24,6 +24,7 @@ import ru.khozyainov.splashun.R
 import ru.khozyainov.splashun.ui.navigation.MainNavGraph
 import ru.khozyainov.splashun.ui.navigation.NavItem
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
+import ru.khozyainov.splashun.ui.screens.collections.CollectionDetailDestination
 import ru.khozyainov.splashun.ui.screens.collections.CollectionsDestination
 import ru.khozyainov.splashun.ui.screens.home.PhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.home.RibbonDestination
@@ -78,6 +79,12 @@ fun SplashunApp(
 
     val photoIdForShare: MutableState<String?> = remember {
         mutableStateOf(null)
+    }
+
+    val title = stringResource(id = currentDestination.titleRes)
+    //TODO сделать корректное отображение заголовков
+    val appBarTitle = remember {
+        mutableStateOf(title)
     }
 
     val scaffoldState = rememberScaffoldState()
@@ -149,7 +156,8 @@ fun SplashunApp(
                     onPressSearch = {
                         searchText.value = it
                     },
-                    photoIdForShare = photoIdForShare.value
+                    photoIdForShare = photoIdForShare.value,
+                    appBarTitle = appBarTitle.value
                 )
             },
             modifier = modifier
@@ -183,7 +191,10 @@ fun SplashunApp(
                     photoDownloaded = {
                         downloadedPhotoUri.value = it
                     },
-                    userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value
+                    userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value,
+                    onClickCollection = { collectionTitle ->
+                        appBarTitle.value = collectionTitle
+                    }
                 )
             }
         }
@@ -220,7 +231,8 @@ fun SplashunApp(
                     onPressSearch = {
                         searchText.value = it
                     },
-                    photoIdForShare = photoIdForShare.value
+                    photoIdForShare = photoIdForShare.value,
+                    appBarTitle = appBarTitle.value
                 )
             },
             bottomBar = {
@@ -252,7 +264,10 @@ fun SplashunApp(
                 photoDownloaded = {
                     downloadedPhotoUri.value = it
                 },
-                userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value
+                userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value,
+                onClickCollection = {collectionTitle ->
+                    appBarTitle.value = collectionTitle
+                }
             )
         }
     }
@@ -459,9 +474,9 @@ private fun getCurrentDestination(
     route: String?
 ): NavigationDestination {
     return when (route) {
-        //NavItem.Collections.screenRoute -> route
         PhotoDetailDestination.route -> PhotoDetailDestination
         CollectionsDestination.route -> CollectionsDestination
+        CollectionDetailDestination.route -> CollectionDetailDestination
         else -> RibbonDestination
     }
 }
@@ -469,6 +484,7 @@ private fun getCurrentDestination(
 private fun canNavigateBack(currentDestination: NavigationDestination): Boolean =
     when (currentDestination) {
         is PhotoDetailDestination -> true
+        is CollectionDetailDestination -> true
         else -> false
     }
 

@@ -152,7 +152,6 @@ fun HomeScreen(
                 }
             }
 
-            // Animate scroll to the first item
             if (scrollToTop) {
                 LaunchedEffect(listState) {
                     listState.animateScrollToItem(index = 0)
@@ -219,21 +218,19 @@ fun PhotoCard(
     connectionState: ConnectionState
 ) {
     val context = LocalContext.current
+    val boxHeight = 300
 
     if (photo == null) {
         Card(
             modifier = modifier
                 .padding(4.dp)
                 .fillMaxWidth()
-                .fillMaxHeight(fraction = 0.4f),
+                .height(boxHeight.dp),
             elevation = 2.dp,
         ) {
             LoadingScreen()
         }
     } else {
-
-        val width = displayWidthHeight.first
-        val height = (photo.height.toDouble() / photo.width.toDouble() * width).toInt()
 
         Card(
             modifier = modifier
@@ -256,11 +253,11 @@ fun PhotoCard(
                 ) {
                     SplashUnImage(
                         modifier = modifier,
-                        image = photo.image,
-                        height = height,
-                        width = width,
+                        imageWithSize = photo,
+                        displayWidthHeight = displayWidthHeight,
                         context = context,
-                        contentScale = ContentScale.FillBounds
+                        contentScale = ContentScale.FillBounds,
+                        boxHeight = boxHeight
                     )
                 }
 

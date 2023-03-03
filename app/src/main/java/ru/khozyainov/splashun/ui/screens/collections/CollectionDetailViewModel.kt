@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import ru.khozyainov.splashun.data.network.models.AbbreviatedPhotoRemote
 import ru.khozyainov.splashun.data.repository.collections.CollectionsRepository
 import ru.khozyainov.splashun.data.repository.photo.PhotoRepository
 import ru.khozyainov.splashun.ui.models.Photo
@@ -54,6 +55,35 @@ class CollectionDetailViewModel @Inject constructor(
                         errorMessage = String()
                     )
                 }
+        }
+    }
+
+    fun setLike(photo: Photo) =
+        if (!photo.like) {
+            photoRepository.setLike(
+                photoId = photo.id,
+                onCompleteCallback = { abbreviatedPhotoRemote ->
+                    setRefreshPhoto(abbreviatedPhotoRemote)
+                },
+                onErrorCallback = { error ->
+                    setErrorState(error)
+                }
+            )
+        } else {
+            photoRepository.deleteLike(
+                photoId = photo.id,
+                onCompleteCallback = { abbreviatedPhotoRemote ->
+                    setRefreshPhoto(abbreviatedPhotoRemote)
+                },
+                onErrorCallback = { error ->
+                    setErrorState(error)
+                }
+            )
+        }
+
+    private fun setRefreshPhoto(abbreviatedPhotoRemote: AbbreviatedPhotoRemote) {
+        viewModelScope.launch(errorHandler) {
+            photoRepository.setRefreshPhotoToDataBase(abbreviatedPhotoRemote)
         }
     }
 

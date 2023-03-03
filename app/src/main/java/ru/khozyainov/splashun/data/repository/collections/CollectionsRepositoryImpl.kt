@@ -36,9 +36,7 @@ class CollectionsRepositoryImpl @Inject constructor(
             }
 
     override fun getCollectionById(id: String): Flow<PhotoCollection> = flow {
-        withContext(Dispatchers.IO){
             emit(collectionsApi.getCollectionById(id))
-        }
     }
 
     private companion object {

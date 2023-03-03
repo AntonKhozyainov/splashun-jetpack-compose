@@ -31,9 +31,14 @@ class PhotosCollectionRemoteMediator @AssistedInject constructor(
 
         return try {
 
-            val listItemPhoto =
-                photoAPI.getPhotosOfCollection(collectionId, pageIndex, state.config.pageSize)
-            //val listItemPhoto = getTestList(collectionId)
+//            val listItemPhoto =
+//                photoAPI.getPhotosOfCollection(collectionId, pageIndex, state.config.pageSize)
+//                    .map { photoEntity ->
+//                        photoEntity.copy(collectionId = collectionId)
+//                    }
+
+            val listItemPhoto = getTestList(collectionId)
+
 
             if (loadType == LoadType.REFRESH) {
                 photoDao.refresh(query = null, collectionId = collectionId, photos = listItemPhoto)
