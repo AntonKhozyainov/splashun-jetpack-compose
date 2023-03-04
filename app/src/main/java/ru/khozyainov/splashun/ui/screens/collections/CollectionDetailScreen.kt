@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,6 +47,7 @@ import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.ExceptionScreen
 import ru.khozyainov.splashun.ui.screens.LoadingScreen
 import ru.khozyainov.splashun.ui.screens.SplashUnImage
+import ru.khozyainov.splashun.ui.screens.home.CollectionPhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.home.RibbonDestination
 import ru.khozyainov.splashun.ui.theme.SplashUnTheme
 import ru.khozyainov.splashun.utils.ConnectionState
@@ -135,7 +137,7 @@ fun CollectionDetailScreen(
                                 }
                             },
                             onClickCard = { photoId ->
-                                navController.navigate("${RibbonDestination.route}/$photoId")
+                                navController.navigate("${CollectionPhotoDetailDestination.prefRoute}/$photoId")
                             }
                         )
                     }
@@ -217,7 +219,8 @@ fun TitleCollectionCard(
                         style = MaterialTheme.typography.h3,
                         color = Color.Black,
                         modifier = modifier
-                            .padding(vertical = 4.dp, horizontal = 24.dp)
+                            .padding(vertical = 4.dp, horizontal = 24.dp),
+                        textAlign = TextAlign.Center
                     )
 
                     Text(

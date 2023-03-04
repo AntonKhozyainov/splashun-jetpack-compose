@@ -57,8 +57,7 @@ fun CollectionsScreen(
     modifier: Modifier = Modifier,
     onScrollToTop: () -> Unit,
     scrollToTop: Boolean = false,
-    displayWidthHeight: Pair<Int, Int>,
-    onClickCollection: (collectionTitle: String) -> Unit
+    displayWidthHeight: Pair<Int, Int>
 ) {
     val collectionsViewModel: CollectionsViewModel = hiltViewModel()
 
@@ -115,7 +114,6 @@ fun CollectionsScreen(
                             photoCollection = collection,
                             displayWidthHeight = displayWidthHeight,
                             onClickCard = { photoCollectionId ->
-                                onClickCollection(collection?.title ?: photoCollectionId)
                                 navController.navigate("${CollectionsDestination.route}/$photoCollectionId")
                             }
                         )

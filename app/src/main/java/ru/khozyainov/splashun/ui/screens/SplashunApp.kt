@@ -26,6 +26,7 @@ import ru.khozyainov.splashun.ui.navigation.NavItem
 import ru.khozyainov.splashun.ui.navigation.NavigationDestination
 import ru.khozyainov.splashun.ui.screens.collections.CollectionDetailDestination
 import ru.khozyainov.splashun.ui.screens.collections.CollectionsDestination
+import ru.khozyainov.splashun.ui.screens.home.CollectionPhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.home.PhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.home.RibbonDestination
 import ru.khozyainov.splashun.ui.screens.topappbar.SplashunTopAppBar
@@ -50,8 +51,6 @@ fun SplashunApp(
     modifier: Modifier = Modifier,
     expand: Boolean = false
 ) {
-
-    //val scope = rememberCoroutineScope()
 
     val context = LocalContext.current
 
@@ -79,12 +78,6 @@ fun SplashunApp(
 
     val photoIdForShare: MutableState<String?> = remember {
         mutableStateOf(null)
-    }
-
-    val title = stringResource(id = currentDestination.titleRes)
-    //TODO сделать корректное отображение заголовков
-    val appBarTitle = remember {
-        mutableStateOf(title)
     }
 
     val scaffoldState = rememberScaffoldState()
@@ -156,8 +149,7 @@ fun SplashunApp(
                     onPressSearch = {
                         searchText.value = it
                     },
-                    photoIdForShare = photoIdForShare.value,
-                    appBarTitle = appBarTitle.value
+                    photoIdForShare = photoIdForShare.value
                 )
             },
             modifier = modifier
@@ -191,10 +183,7 @@ fun SplashunApp(
                     photoDownloaded = {
                         downloadedPhotoUri.value = it
                     },
-                    userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value,
-                    onClickCollection = { collectionTitle ->
-                        appBarTitle.value = collectionTitle
-                    }
+                    userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value
                 )
             }
         }
@@ -231,8 +220,7 @@ fun SplashunApp(
                     onPressSearch = {
                         searchText.value = it
                     },
-                    photoIdForShare = photoIdForShare.value,
-                    appBarTitle = appBarTitle.value
+                    photoIdForShare = photoIdForShare.value
                 )
             },
             bottomBar = {
@@ -264,10 +252,7 @@ fun SplashunApp(
                 photoDownloaded = {
                     downloadedPhotoUri.value = it
                 },
-                userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value,
-                onClickCollection = {collectionTitle ->
-                    appBarTitle.value = collectionTitle
-                }
+                userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded.value
             )
         }
     }
@@ -462,24 +447,27 @@ fun BottomNavigation(
 
 private fun getCurrentNavRoute(
     route: String?
-): String {
-    return when (route) {
+): String =
+    when (route) {
         NavItem.Collections.screenRoute -> route
         NavItem.Profile.screenRoute -> route
+        CollectionDetailDestination.route -> NavItem.Collections.screenRoute
+        CollectionPhotoDetailDestination.route -> NavItem.Collections.screenRoute
         else -> NavItem.Home.screenRoute
     }
-}
+
 
 private fun getCurrentDestination(
     route: String?
-): NavigationDestination {
-    return when (route) {
+): NavigationDestination =
+    when (route) {
         PhotoDetailDestination.route -> PhotoDetailDestination
         CollectionsDestination.route -> CollectionsDestination
         CollectionDetailDestination.route -> CollectionDetailDestination
+        CollectionPhotoDetailDestination.route -> PhotoDetailDestination
         else -> RibbonDestination
     }
-}
+
 
 private fun canNavigateBack(currentDestination: NavigationDestination): Boolean =
     when (currentDestination) {
@@ -495,8 +483,7 @@ private fun messageToSnackBarType(message: String): SnackBarType =
         else -> throw Exception("Недопустимое значение message = $message")
     }
 
-private fun showDownloadedPhoto(photoUri: String, context: Context){
-
+private fun showDownloadedPhoto(photoUri: String, context: Context) {
     val localUri = photoUri.toUri()
     val intent = Intent(Intent.ACTION_VIEW)
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

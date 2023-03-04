@@ -37,8 +37,7 @@ fun SplashunTopAppBar(
     modifier: Modifier = Modifier,
     onPressSearch: (String) -> Unit,
     viewModel: TopAppBarViewModel = hiltViewModel(),
-    photoIdForShare: String? = null,
-    appBarTitle: String
+    photoIdForShare: String? = null
 ) {
 
     val context = LocalContext.current
@@ -55,8 +54,7 @@ fun SplashunTopAppBar(
             searchTextState = searchTextState,
             viewModel = viewModel,
             onPressSearch = onPressSearch,
-            photoIdForShare = photoIdForShare,
-            appBarTitle = appBarTitle
+            photoIdForShare = photoIdForShare
         )
     } else {
         TopAppBarWithoutNavIcon(
@@ -67,8 +65,7 @@ fun SplashunTopAppBar(
             searchTextState = searchTextState,
             viewModel = viewModel,
             onPressSearch = onPressSearch,
-            photoIdForShare = photoIdForShare,
-            appBarTitle = appBarTitle
+            photoIdForShare = photoIdForShare
         )
     }
 }
@@ -82,14 +79,13 @@ fun TopAppBarWithoutNavIcon(
     searchTextState: State<String>,
     viewModel: TopAppBarViewModel,
     onPressSearch: (String) -> Unit,
-    photoIdForShare: String? = null,
-    appBarTitle: String
+    photoIdForShare: String? = null
 ) {
 
     TopAppBar(
         title = {
             Text(
-                text = appBarTitle,//stringResource(id = navigationDestination.titleRes),
+                text = stringResource(id = navigationDestination.titleRes),
                 style = MaterialTheme.typography.h1,
                 color = Color.Black
             )
@@ -136,14 +132,13 @@ fun TopAppBarWithNavIcon(
     viewModel: TopAppBarViewModel,
     onPressSearch: (String) -> Unit,
     navigateUp: () -> Unit,
-    photoIdForShare: String? = null,
-    appBarTitle: String
+    photoIdForShare: String? = null
 ) {
 
     TopAppBar(
         title = {
             Text(
-                text = appBarTitle,//stringResource(id = navigationDestination.titleRes),
+                text = stringResource(id = navigationDestination.titleRes),
                 style = MaterialTheme.typography.h1,
                 color = Color.Black
             )

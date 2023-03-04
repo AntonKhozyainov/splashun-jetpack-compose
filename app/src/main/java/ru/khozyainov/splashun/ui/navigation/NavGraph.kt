@@ -13,6 +13,7 @@ import ru.khozyainov.splashun.ui.screens.SplashunDestination
 import ru.khozyainov.splashun.ui.screens.collections.CollectionDetailDestination
 import ru.khozyainov.splashun.ui.screens.collections.CollectionDetailScreen
 import ru.khozyainov.splashun.ui.screens.collections.CollectionsScreen
+import ru.khozyainov.splashun.ui.screens.home.CollectionPhotoDetailDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingDestination
 import ru.khozyainov.splashun.ui.screens.onbording.OnBoardingScreen
 import ru.khozyainov.splashun.ui.screens.home.HomeScreen
@@ -77,8 +78,7 @@ fun MainNavGraph(
     photoIdForShare: (String?) -> Unit,
     photoDownloaded: (String) -> Unit,
     userNotifiedThatPhotoDownloaded: Boolean = false,
-    connectionState: ConnectionState,
-    onClickCollection: (collectionTitle: String) -> Unit
+    connectionState: ConnectionState
 ) {
 
     //TODO remember?
@@ -112,11 +112,10 @@ fun MainNavGraph(
             displayWidthHeight = displayWidthHeight,
             scrollToTop = scrollToTop,
             onScrollToTop = onScrollToTop,
-//            photoIdForShare = photoIdForShare,
-//            photoDownloaded = photoDownloaded,
-//            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded,
-            connectionState = connectionState,
-            onClickCollection = onClickCollection
+            photoIdForShare = photoIdForShare,
+            photoDownloaded = photoDownloaded,
+            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded,
+            connectionState = connectionState
         )
 
         composable(
@@ -179,10 +178,9 @@ fun NavGraphBuilder.collectionsGraph(
     onScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
     displayWidthHeight: Pair<Int, Int>,
-    onClickCollection: (collectionTitle: String) -> Unit,
-//    photoIdForShare: (String?) -> Unit,
-//    photoDownloaded: (String) -> Unit,
-//    userNotifiedThatPhotoDownloaded: Boolean = false,
+    photoIdForShare: (String?) -> Unit,
+    photoDownloaded: (String) -> Unit,
+    userNotifiedThatPhotoDownloaded: Boolean = false,
     connectionState: ConnectionState
 ) {
     composable(
@@ -193,8 +191,7 @@ fun NavGraphBuilder.collectionsGraph(
             modifier = modifier,
             scrollToTop = scrollToTop,
             onScrollToTop = onScrollToTop,
-            displayWidthHeight = displayWidthHeight,
-            onClickCollection = onClickCollection
+            displayWidthHeight = displayWidthHeight
         )
     }
 
@@ -207,6 +204,20 @@ fun NavGraphBuilder.collectionsGraph(
             displayWidthHeight = displayWidthHeight,
             connectionState = connectionState,
             navController = navController
+        )
+    }
+
+    composable(
+        route = CollectionPhotoDetailDestination.route,
+        arguments = listOf(navArgument(CollectionPhotoDetailDestination.argName) { type = NavType.StringType })
+    ) { backStackEntry ->
+        val photoId = backStackEntry.arguments?.getString(CollectionPhotoDetailDestination.argName)
+        photoIdForShare(photoId)
+        PhotoDetailScreen(
+            modifier = modifier,
+            displayWidthHeight = displayWidthHeight,
+            photoDownloaded = photoDownloaded,
+            userNotifiedThatPhotoDownloaded = userNotifiedThatPhotoDownloaded
         )
     }
 }

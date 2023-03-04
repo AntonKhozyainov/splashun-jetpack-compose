@@ -39,7 +39,6 @@ class PhotosCollectionRemoteMediator @AssistedInject constructor(
 
             val listItemPhoto = getTestList(collectionId)
 
-
             if (loadType == LoadType.REFRESH) {
                 photoDao.refresh(query = null, collectionId = collectionId, photos = listItemPhoto)
             } else {

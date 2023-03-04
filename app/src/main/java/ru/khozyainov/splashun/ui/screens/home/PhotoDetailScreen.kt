@@ -50,6 +50,13 @@ object PhotoDetailDestination : NavigationDestination {
     override val titleRes: Int = R.string.photo
 }
 
+object CollectionPhotoDetailDestination : NavigationDestination {
+    const val argName = "photoId"
+    const val prefRoute = "CollectionPhotoDetailDestination"
+    override val route: String = "$prefRoute/{$argName}"
+    override val titleRes: Int = R.string.photo
+}
+
 @Composable
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,

@@ -67,9 +67,7 @@ class PhotoRepositoryImpl @Inject constructor(
             }
 
     override fun getPhotoById(id: String): Flow<PhotoDetail> = flow {
-        withContext(Dispatchers.IO){
-            emit(photoAPI.getPhotoByID(id))
-        }
+        emit(photoAPI.getPhotoByID(id))
     }
 
 

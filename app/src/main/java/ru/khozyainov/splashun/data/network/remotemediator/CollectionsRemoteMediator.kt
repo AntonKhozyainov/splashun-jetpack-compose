@@ -37,7 +37,7 @@ class CollectionsRemoteMediator @Inject constructor(
         return try {
             //todo
             val collections = collectionsAPI.getCollections(pageIndex, state.config.pageSize)
-            //val collections = getTestList()
+//            val collections = getTestList()
 
             if (loadType == LoadType.REFRESH) {
                 collectionsDao.refresh(collections)
